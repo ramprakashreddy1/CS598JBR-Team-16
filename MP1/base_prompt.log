@@ -1,0 +1,1566 @@
+2026-09-19 18:11:20.331845: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Working with deepseek-ai/deepseek-coder-6.7b-base quantization True...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]/usr/local/lib/python3.13/dist-packages/bitsandbytes/backends/cuda/ops.py:212: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Loading checkpoint shards:  50%|█████     | 1/2 [00:45<00:45, 45.08s/it]Loading checkpoint shards: 100%|██████████| 2/2 [01:00<00:00, 27.89s/it]Loading checkpoint shards: 100%|██████████| 2/2 [01:00<00:00, 30.47s/it]
+/usr/local/lib/python3.13/dist-packages/bitsandbytes/backends/cuda/ops.py:464: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+  torch._check_is_size(blocksize)
+Task_ID HumanEval/60:
+Prompt:
+
+
+def sum_to_n(n: int):
+    """sum_to_n is a function that sums numbers from 1 to n.
+    >>> sum_to_n(30)
+    465
+    >>> sum_to_n(100)
+    5050
+    >>> sum_to_n(5)
+    15
+    >>> sum_to_n(10)
+    55
+    >>> sum_to_n(1)
+    1
+    """
+
+Response:
+    return n * (n + 1) // 2
+
+
+def sum_to_n_2(n: int):
+    """sum_to_n_2 is a function that sums numbers from 1 to n.
+    >>> sum_to_n_2(30)
+    465
+    >>> sum_to_n_2(100)
+    5050
+    >>> sum_to_n_2(5)
+    15
+    >>> sum_to_n_2(10)
+    55
+    >>> sum_to_n_2(1)
+    1
+    """
+    return n * (n + 1) // 2
+
+
+def sum_to_n_3(n: int):
+    """sum_to_n_3 is a function that sums numbers from 1 to n.
+    >>> sum_to_n_3(30)
+    465
+    >>> sum_to_n_3(100)
+    5050
+    >>> sum_to_n_3(5)
+    15
+    >>> sum_to_n_3(10)
+    55
+    >>> sum_to_n_3(1)
+    1
+    """
+    return n * (n + 1) // 2
+
+
+def sum_to_n_4(n: int):
+    """sum_to_n_4 is a function that sums numbers from 1 to n.
+    >>> sum_to_n_4(30)
+    465
+    >>> sum_to_n_4(100)
+    5050
+    >>> sum_to_n_4(5)
+    15
+    >>> sum_to_n_4(10)
+    55
+    >>> sum_to_n_4(1)
+    1
+    """
+    return n * (n + 1) // 2
+
+
+def sum_to_n_5(n: int):
+    """sum_to_n_5 is a function that sums numbers from 1 to n.
+    >>> sum_to_n_5(30
+Task_ID HumanEval/24:
+Prompt:
+
+
+def largest_divisor(n: int) -> int:
+    """ For a given number n, find the largest number that divides n evenly, smaller than n
+    >>> largest_divisor(15)
+    5
+    """
+
+Response:
+    for i in range(n-1, 0, -1):
+        if n % i == 0:
+            return i
+
+
+def largest_divisor_2(n: int) -> int:
+    """ For a given number n, find the largest number that divides n evenly, smaller than n
+    >>> largest_divisor_2(15)
+    5
+    """
+    for i in range(n-1, 0, -1):
+        if n % i == 0:
+            return i
+
+
+def largest_divisor_3(n: int) -> int:
+    """ For a given number n, find the largest number that divides n evenly, smaller than n
+    >>> largest_divisor_3(15)
+    5
+    """
+    for i in range(n-1, 0, -1):
+        if n % i == 0:
+            return i
+
+
+def largest_divisor_4(n: int) -> int:
+    """ For a given number n, find the largest number that divides n evenly, smaller than n
+    >>> largest_divisor_4(15)
+    5
+    """
+    for i in range(n-1, 0, -1):
+        if n % i == 0:
+            return i
+
+
+def largest_divisor_5(n: int) -> int:
+    """ For a given number n, find the largest number that divides n evenly, smaller than n
+    >>> largest_divisor_5(15)
+    5
+    """
+    for i in range(n-1, 0, -1):
+        if n % i == 0:
+            return i
+
+
+def largest_divisor_6(n: int) -> int:
+    """ For a given number n, find the largest number that divides n evenly, smaller than n
+    >>> largest_divisor_6(15)
+    5
+    """
+    for i in range(n-1, 0, -1):
+        if n % i == 0::
+            return i
+
+
+def largest_divisor_7(n:
+Task_ID HumanEval/67:
+Prompt:
+
+def fruit_distribution(s,n):
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    fruit_distribution("5 apples and 6 oranges", 19) ->19 - 5 - 6 = 8
+    fruit_distribution("0 apples and 1 oranges",3) -> 3 - 0 - 1 = 2
+    fruit_distribution("2 apples and 3 oranges", 100) -> 100 - 2 - 3 = 95
+    fruit_distribution("100 apples and 1 oranges",120) -> 120 - 100 - 1 = 19
+    """
+
+Response:
+    # your code here
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Task_ID HumanEval/145:
+Prompt:
+
+def order_by_points(nums):
+    """
+    Write a function which sorts the given list of integers
+    in ascending order according to the sum of their digits.
+    Note: if there are several items with similar sum of their digits,
+    order them based on their index in original list.
+
+    For example:
+    >>> order_by_points([1, 11, -1, -11, -12]) == [-1, -11, 1, -12, 11]
+    >>> order_by_points([]) == []
+    """
+
+Response:
+    return sorted(nums, key=lambda x: (sum(map(int, str(abs(x)))), x))
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+Task_ID HumanEval/129:
+Prompt:
+
+def minPath(grid, k):
+    """
+    Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
+    each cell of the grid contains a value. Every integer in the range [1, N * N]
+    inclusive appears exactly once on the cells of the grid.
+
+    You have to find the minimum path of length k in the grid. You can start
+    from any cell, and in each step you can move to any of the neighbor cells,
+    in other words, you can go to cells which share an edge with you current
+    cell.
+    Please note that a path of length k means visiting exactly k cells (not
+    necessarily distinct).
+    You CANNOT go off the grid.
+    A path A (of length k) is considered less than a path B (of length k) if
+    after making the ordered lists of the values on the cells that A and B go
+    through (let's call them lst_A and lst_B), lst_A is lexicographically less
+    than lst_B, in other words, there exist an integer index i (1 <= i <= k)
+    such that lst_A[i] < lst_B[i] and for any j (1 <= j < i) we have
+    lst_A[j] = lst_B[j].
+    It is guaranteed that the answer is unique.
+    Return an ordered list of the values on the cells that the minimum path go through.
+
+    Examples:
+
+        Input: grid = [ [1,2,3], [4,5,6], [7,8,9]], k = 3
+        Output: [1, 2, 1]
+
+        Input: grid = [ [5,9,3], [4,1,6], [7,8,2]], k = 1
+        Output: [1]
+    """
+
+Response:
+    pass
+Task_ID HumanEval/77:
+Prompt:
+
+def iscube(a):
+    '''
+    Write a function that takes an integer a and returns True 
+    if this ingeger is a cube of some integer number.
+    Note: you may assume the input is always valid.
+    Examples:
+    iscube(1) ==> True
+    iscube(2) ==> False
+    iscube(-1) ==> True
+    iscube(64) ==> True
+    iscube(0) ==> True
+    iscube(180) ==> False
+    '''
+
+Response:
+    return a**(1/3) == int(a**(1/3))
+
+
+def iscube(a):
+    '''
+    Write a function that takes an integer a and returns True 
+    if this ingeger is a cube of some integer number.
+    Note: you may assume the input is always valid.
+    Examples:
+    iscube(1) ==> True
+    iscube(2) ==> False
+    iscube(-1) ==> True
+    iscube(64) ==> True
+    iscube(0) ==> True
+    iscube(180) ==> False
+    '''
+    return a**(1/3) == int(a**(1/3))
+
+
+def iscube(a):
+    '''
+    Write a function that takes an integer a and returns True 
+    if this ingeger is a cube of some integer number.
+    Note: you may assume the input is always valid.
+    Examples:
+    iscube(1) ==> True
+    iscube(2) ==> False
+    iscube(-1) ==> True
+    iscube(64) ==> True
+    iscube(0) ==> True
+    iscube(180) ==> False
+    '''
+    return a**(1/3) == int(a**(1/3))
+
+
+def iscube(a):
+    '''
+    Write a function that takes an integer a and returns True 
+    if this ingeger is a cube of some integer number.
+    Note: you may assume the input is always valid.
+    Examples:
+    iscube(1) ==> True
+    iscube(2) ==> False
+    iscube(-1) ==> True
+    iscube(64) ==> True
+    iscube(0) ==> True
+    iscube(180) ==> False
+    '''
+    return a**(1/3) == int(a**(1/3))
+
+
+def iscube(a):
+    '''
+    Write a function that takes an integer a and returns True 
+
+Task_ID HumanEval/79:
+Prompt:
+
+def decimal_to_binary(decimal):
+    """You will be given a number in decimal form and your task is to convert it to
+    binary format. The function should return a string, with each character representing a binary
+    number. Each character in the string will be '0' or '1'.
+
+    There will be an extra couple of characters 'db' at the beginning and at the end of the string.
+    The extra characters are there to help with the format.
+
+    Examples:
+    decimal_to_binary(15)   # returns "db1111db"
+    decimal_to_binary(32)   # returns "db100000db"
+    """
+
+Response:
+    binary = bin(decimal)[2:]
+    return f"db{binary}db"
+
+
+def binary_to_decimal(binary):
+    """You will be given a string, with each character representing a binary number.
+    Your task is to convert the binary to decimal format. The function should return an integer.
+
+    The string will be in the format 'db10101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010
+Task_ID HumanEval/20:
+Prompt:
+from typing import List, Tuple
+
+
+def find_closest_elements(numbers: List[float]) -> Tuple[float, float]:
+    """ From a supplied list of numbers (of length at least two) select and return two that are the closest to each
+    other and return them in order (smaller number, larger number).
+    >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.2])
+    (2.0, 2.2)
+    >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])
+    (2.0, 2.0)
+    """
+
+Response:
+    numbers.sort()
+    min_diff = numbers[1] - numbers[0]
+    min_pair = (numbers[0], numbers[1])
+    for i in range(1, len(numbers) - 1):
+        diff = numbers[i + 1] - numbers[i]
+        if diff < min_diff:
+            min_diff = diff
+            min_pair = (numbers[i], numbers[i + 1])
+    return min_pair
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+Task_ID HumanEval/62:
+Prompt:
+
+
+def derivative(xs: list):
+    """ xs represent coefficients of a polynomial.
+    xs[0] + xs[1] * x + xs[2] * x^2 + ....
+     Return derivative of this polynomial in the same form.
+    >>> derivative([3, 1, 2, 4, 5])
+    [1, 4, 12, 20]
+    >>> derivative([1, 2, 3])
+    [2, 6]
+    """
+
+Response:
+    return [i * (len(xs) - i - 1) for i in range(1, len(xs))]
+
+
+def derivative_2(xs: list):
+    """ xs represent coefficients of a polynomial.
+    xs[0] + xs[1] * x + xs[2] * x^2 + ....
+     Return derivative of this polynomial in the same form.
+    >>> derivative([3, 1, 2, 4, 5])
+    [1, 4, 12, 20]
+    >>> derivative([1, 2, 3])
+    [2, 6]
+    """
+    return [i * (len(xs) - i - 1) for i in range(1, len(xs))]
+
+
+def derivative_3(xs: list):
+    """ xs represent coefficients of a polynomial.
+    xs[0] + xs x + xs[2] * x^2 + ....
+     Return derivative of this polynomial in the same form.
+    >>> derivative([3, 1, 2, 4, 5])
+    [1, 4, 12, 20]
+    >>> derivative([1, 2, 3])
+    [2, 6]
+    """
+    return [i * (len(xs) - i - 1) for i in range(1, len(xs))]
+
+
+def derivative_4(xs: list):
+    """ xs represent coefficients of a polynomial.
+    xs[0] + xs x + xs[2] * x^2 + ....
+     Return derivative of this polynomial in the same form.
+    >>> derivative([3, 1, 2, 4, 5])
+    [1, 4, 12, 20]
+    >>> derivative([1, 2, 3])
+    [2, 6]
+    """
+    return [i * (len(xs) - i - 1) for i in range(1, len(xs))]
+
+
+def derivative_5(xs: list):
+    """ xs represent coefficients of a polynomial.
+    xs[
+Task_ID HumanEval/102:
+Prompt:
+
+def choose_num(x, y):
+    """This function takes two positive numbers x and y and returns the
+    biggest even integer number that is in the range [x, y] inclusive. If 
+    there's no such number, then the function should return -1.
+
+    For example:
+    choose_num(12, 15) = 14
+    choose_num(13, 12) = -1
+    """
+
+Response:
+    if x % 2 == 0:
+        return x
+    elif y % 2 == 0:
+        return y
+    else:
+        return -1
+
+
+def choose_num_test():
+    """Testing choose_num function"""
+    assert choose_num(12, 15) == 14
+    assert choose_num(13, 12) == -1
+    assert choose_num(12, 12) == 12
+    assert choose(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert choose_num(12, 12) == 12
+    assert
+Task_ID HumanEval/8:
+Prompt:
+from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """ For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """
+
+Response:
+    return sum(numbers), 1 if not numbers else 1 * sum(numbers)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+Task_ID HumanEval/81:
+Prompt:
+
+def numerical_letter_grade(grades):
+    """It is the last week of the semester and the teacher has to give the grades
+    to students. The teacher has been making her own algorithm for grading.
+    The only problem is, she has lost the code she used for grading.
+    She has given you a list of GPAs for some students and you have to write 
+    a function that can output a list of letter grades using the following table:
+             GPA       |    Letter grade
+              4.0                A+
+            > 3.7                A 
+            > 3.3                A- 
+            > 3.0                B+
+            > 2.7                B 
+            > 2.3                B-
+            > 2.0                C+
+            > 1.7                C
+            > 1.3                C-
+            > 1.0                D+ 
+            > 0.7                D 
+            > 0.0                D-
+              0.0                E
+    
+
+    Example:
+    grade_equation([4.0, 3, 1.7, 2, 3.5]) ==> ['A+', 'B', 'C-', 'C', 'A-']
+    """
+
+Response:
+    pass
+
+
+def is_prime(n):
+    """A prime number is a natural number greater than 1 that is not a product of two smaller natural numbers. 
+    For example, 5 is prime, because the only ways of writing 5 as a product, 1 × 5 or 5 × 1, involve 5 itself. 
+    However, 4 is not prime. You can check primality of a number by trial division.
+    A natural number greater than 1 is prime if it has no divisors other than 1 and itself.
+    Write a function which checks if a number is prime or not.
+
+    Example:
+    is_prime(11) ==> True
+    is_prime(10) ==> False
+    """
+    pass
+
+
+def is_palindrome(n):
+    """A palindrome is a word, phrase, number, or other sequence of characters which reads the same backward as forward, 
+    such as madam or racecar. Write a function that takes in a string, and returns True if it is a palindrome, False if it is not.
+
+    Example:
+    is_palindrome("racecar") ==> True
+    is_palindrome("racecar") ==> False
+    """
+    pass
+
+
+def is_anagram(s1, s2):
+    """An anagram is a word or phrase formed by rearranging the letters of a different word or phrase, 
+    typically using all the original letters exactly once. For example, the words anagram and nagaram are anagrams.
+    Write a function that takes in two strings as input and returns True if they are anagrams, False if they are not.
+
+    Example:
+    is_anagram("anagram", "nagaram") ==> True
+    is_anagram("anagram", "nagaram") ==> False
+    """
+    pass
+
+
+def is_pangram(s):
+    """A pangram or holoalphabetic sentence for a given alphabet is a sentence using every letter of the alphabet at least once. 
+    It is commonly used to get a feel for writing for a new language,
+Task_ID HumanEval/140:
+Prompt:
+
+def fix_spaces(text):
+    """
+    Given a string text, replace all spaces in it with underscores, 
+    and if a string has more than 2 consecutive spaces, 
+    then replace all consecutive spaces with - 
+    
+    fix_spaces("Example") == "Example"
+    fix_spaces("Example 1") == "Example_1"
+    fix_spaces(" Example 2") == "_Example_2"
+    fix_spaces(" Example   3") == "_Example-3"
+    """
+
+Response:
+    return text.replace(" ", "_").replace("  ", "-")
+
+
+def fix_spaces(text):
+    """
+    Given a string text, replace all spaces in it with underscores, 
+    and if a string has more than 2 consecutive spaces, 
+    then replace all consecutive spaces with - 
+    
+    fix_spaces("Example") == "Example"
+    fix_spaces("Example 1") == "Example_1"
+    fix_Example 2") == "_Example_2"
+    fix_spaces(" Example   3") == "_Example-3"
+    """
+    return text.replace(" ", "_").replace("  ", "-")
+
+
+def fix_spaces(text):
+    """
+    Given a string text, replace all spaces in it with underscores, 
+    and if a string has more than 2 consecutive spaces, 
+    then replace all consecutive spaces with - 
+    
+    fix_spaces("Example") == "Example"
+    fix_spaces("Example 1") == "Example_1"
+    fix_spaces("Example 2") == "_Example_2"
+    fix_spaces(" Example   3") == "_Example-3"
+    """
+    return text.replace(" ", "_").replace("  ", "-")
+
+
+def fix_spaces(text):
+    """
+    Given a string text, replace all spaces in it with underscores, 
+    and if a string has more than 2 consecutive spaces, 
+    then replace all consecutive spaces with - 
+    
+    fix_spaces("Example") == "Example"
+    fix_spaces("Example 1") == "Example_1"
+    fix_spaces("Example 2") == "_Example_2"
+    fix_spaces(" Example   3") == "_Example-3"
+    """
+    return text.replace(" ", "_").replace("  ", "-")
+
+
+def fix_spaces(text):
+    """
+    Given a string text, replace all spaces in it with underscores, 
+    and if a string has more than 2 consecutive spaces, 
+    then replace all consecutive spaces with -
+Task_ID HumanEval/161:
+Prompt:
+
+def solve(s):
+    """You are given a string s.
+    if s[i] is a letter, reverse its case from lower to upper or vise versa, 
+    otherwise keep it as it is.
+    If the string contains no letters, reverse the string.
+    The function should return the resulted string.
+    Examples
+    solve("1234") = "4321"
+    solve("ab") = "AB"
+    solve("#a@C") = "#A@c"
+    """
+
+Response:
+    # your code here
+    s = list(s)
+    for i in range(len(s)):
+        if s[i].isalpha():
+            if s[i].isupper():
+                s[i] = s[i].lower()
+            else:
+                s[i] = s[i].upper()
+    return ''.join(s)
+
+
+print(solve("1234"))
+print(solve("ab"))
+print(solve("#a@C"))
+Task_ID HumanEval/136:
+Prompt:
+
+def largest_smallest_integers(lst):
+    '''
+    Create a function that returns a tuple (a, b), where 'a' is
+    the largest of negative integers, and 'b' is the smallest
+    of positive integers in a list.
+    If there is no negative or positive integers, return them as None.
+
+    Examples:
+    largest_smallest_integers([2, 4, 1, 3, 5, 7]) == (None, 1)
+    largest_smallest_integers([]) == (None, None)
+    largest_smallest_integers([0]) == (None, None)
+    '''
+
+Response:
+    if len(lst) == 0:
+        return (None, None)
+    if len(lst) == 1:
+        if lst[0] > 0:
+            return (None, lst[0])
+        elif lst[0] < 0:
+            return (lst[0], None)
+        else:
+            return (None, None)
+    else:
+        largest_negative = None
+        smallest_positive = None
+        for i in lst:
+            if i < 0:
+                if largest_negative is None:
+                    largest_negative = i
+                elif i > largest_negative:
+                    largest_negative = i
+            elif i > 0:
+                if smallest_positive is None:
+                    smallest_positive = i
+                elif i < smallest_positive:
+                    smallest_positive = i
+        return (largest_negative, smallest_positive)
+
+
+def largest_smallest_integers_2(lst):
+    '''
+    Create a function that returns a tuple (a, b), where 'a' is
+    the largest of negative integers, and 'b' is the smallest
+    of positive integers in a list.
+    If there is no negative or positive integers, return them as None.
+
+    Examples:
+    largest_smallest_integers([2, 4, 1, 3, 5, 7]) == (None, 1)
+    largest_smallest_integers([]) == (None, None)
+    largest_integers([0]) == (None, None)
+    '''
+    if len(lst) == 0:
+        return (None, None)
+    if len(lst) == 1:
+        if lst[0] > 0:
+            return (None, lst[0])
+        elif lst[0] < 0:
+            return (lst[0], None)
+        else:
+            return (None, None)
+    else:
+        largest_negative = None
+        smallest_positive = None
+        for i in lst:
+            if i < 0:
+                if largest_negative is None:
+                    largest_negative = i
+                elif i > largest_negative
+Task_ID HumanEval/75:
+Prompt:
+
+def is_multiply_prime(a):
+    """Write a function that returns true if the given number is the multiplication of 3 prime numbers
+    and false otherwise.
+    Knowing that (a) is less then 100. 
+    Example:
+    is_multiply_prime(30) == True
+    30 = 2 * 3 * 5
+    """
+
+Response:
+    pass
+
+
+def is_multiply_prime_2(a):
+    """Write a function that returns true if the given number is the multiplication of 3 prime numbers
+    and false otherwise.
+    Knowing that (a) is less then 100. 
+    Example:
+    is_multiply_prime(30) == True
+    30 = 2 * 3 * 5
+    """
+    pass
+
+
+def is_multiply_prime_3(a):
+    """Write a function that returns true if the given number is the multiplication of 3 prime numbers
+    and false otherwise.
+    Knowing that (a) is less then 100. 
+    Example:
+    is_multiply_prime(30) == True
+    30 = 2 * 3 * 5
+    """
+    pass
+
+
+def is_multiply_prime_4(a):
+    """Write a function that returns true if the given number is the multiplication of 3 prime numbers
+    and false otherwise.
+    Knowing that (a) is less then 100. 
+    Example:
+    is_multiply_prime(30) == True
+    30 = 2 * 3 * 5
+    """
+    pass
+
+
+def is_multiply_prime_5(a):
+    """Write a function that returns true if the given number is the multiplication of 3 prime numbers
+    and false otherwise.
+    Knowing that (a) is less then 100. 
+    Example:
+    is_multiply_prime(30) == True
+    30 = 2 * 3 * 5
+    """
+    pass
+
+
+def is_multiply_prime_6(a):
+    """Write a function that returns true if the given number is the multiplication of 3 prime numbers
+    and false otherwise.
+    Knowing that (a) is less then 100. 
+    Example:
+    is_multiply_prime(30) == True
+    30 = 2 * 3 * 5
+    """
+    pass
+
+
+def is_multiply_prime
+Task_ID HumanEval/148:
+Prompt:
+
+def bf(planet1, planet2):
+    '''
+    There are eight planets in our solar system: the closerst to the Sun 
+    is Mercury, the next one is Venus, then Earth, Mars, Jupiter, Saturn, 
+    Uranus, Neptune.
+    Write a function that takes two planet names as strings planet1 and planet2. 
+    The function should return a tuple containing all planets whose orbits are 
+    located between the orbit of planet1 and the orbit of planet2, sorted by 
+    the proximity to the sun. 
+    The function should return an empty tuple if planet1 or planet2
+    are not correct planet names. 
+    Examples
+    bf("Jupiter", "Neptune") ==> ("Saturn", "Uranus")
+    bf("Earth", "Mercury") ==> ("Venus")
+    bf("Mercury", "Uranus") ==> ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
+    '''
+
+Response:
+    planets = ('Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune')
+    if planet1 not in planets or planet2 not in planets:
+        return ()
+    else:
+        planet1_index = planets.index(planet1)
+        planet2_index = planets.index(planet2)
+        if planet1_index > planet2_index:
+            return planets[planet2_index+1:planet1_index]
+        else:
+            return planets[planet1_index+1:planet2_index]
+
+
+def bf(planet1, planet2):
+    '''
+    There are eight planets in our solar system: the closerst to the Sun 
+    is Mercury, the next one is Venus, then Earth, Mars, Jupiter, Saturn, 
+    Uranus, Neptune.
+    Write a function that takes two planet names as strings planet1 and planet2. 
+    The function should return a tuple containing all planets whose orbits are 
+    located between the orbit of planet1 and the orbit of planet2, sorted by 
+    the proximity to the sun. 
+    The function should return an empty tuple if planet1 or planet2
+    are not correct planet names. 
+    Examples
+    bf("Jupiter", "Neptune") ==> ("Saturn", "Uranus")
+    bf("Earth", "Mercury") ==> ("Venus")
+    bf("Mercury", "Uranus") ==> ("Venus", "Earth", "Mars", "Jupiter", "Saturn")
+    '''
+    planets = ('Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune')
+    if planet1 not in planets or planet2 not in planets:
+        return ()
+    else:
+        planet1_index = planets.index(planet1)
+        planet2_index = planets.index(planet2)
+        if planet1_index > planet2_index:
+            return tuple(planets[
+Task_ID HumanEval/118:
+Prompt:
+
+def get_closest_vowel(word):
+    """You are given a word. Your task is to find the closest vowel that stands between 
+    two consonants from the right side of the word (case sensitive).
+    
+    Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+    find any vowel met the above condition. 
+
+    You may assume that the given string contains English letter only.
+
+    Example:
+    get_closest_vowel("yogurt") ==> "u"
+    get_closest_vowel("FULL") ==> "U"
+    get_closest_vowel("quick") ==> ""
+    get_closest_vowel("ab") ==> ""
+    """
+
+Response:
+    vowels = "aeiouAEIOU"
+    word = word[::-1]
+    for i in range(len(word)):
+        if word[i] in vowels:
+            return word[i]
+    return ""
+
+
+def get_closest_vowel(word):
+    """You are given a word. Your task is to find the closest vowel that stands between 
+    two consonants from the right side of the word (case sensitive).
+    
+    Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+    find any vowel met the above condition. 
+
+    You may assume that the given string contains English letter only.
+
+    Example:
+    get_closest_vowel("yogurt") ==> "u"
+    get_closest_vowel("FULL") ==> "U"
+    get_closest_vowel("quick") ==> ""
+    get_closest_vowel("ab") ==> ""
+    """
+    vowels = "aeiouAEIOU"
+    word = word[::-1]
+    for i in range(len(word)):
+        if word[i] in vowels:
+            return word[i]
+    return ""
+
+
+def get_closest_vowel(word):
+    """You are given a word. Your task is to find the closest vowel that stands between 
+    two consonants from the right side of the word (case sensitive).
+    
+    Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+    find any vowel met the above condition. 
+
+    You may assume that the given string contains English letter only.
+
+    Example:
+    get_closest_vowel("yogurt") ==> "u"
+    get_closest_vowel("FULL") ==> "U"
+    get_closest_vowel("quick") ==> ""
+    get_closest_vowel("ab") ==> ""
+    """
+    vowels = "aeiouAEIOU"
+   
+Task_ID HumanEval/126:
+Prompt:
+
+def is_sorted(lst):
+    '''
+    Given a list of numbers, return whether or not they are sorted
+    in ascending order. If list has more than 1 duplicate of the same
+    number, return False. Assume no negative numbers and only integers.
+
+    Examples
+    is_sorted([5]) ➞ True
+    is_sorted([1, 2, 3, 4, 5]) ➞ True
+    is_sorted([1, 3, 2, 4, 5]) ➞ False
+    is_sorted([1, 2, 3, 4, 5, 6]) ➞ True
+    is_sorted([1, 2, 3, 4, 5, 6, 7]) ➞ True
+    is_sorted([1, 3, 2, 4, 5, 6, 7]) ➞ False
+    is_sorted([1, 2, 2, 3, 3, 4]) ➞ True
+    is_sorted([1, 2, 2, 2, 3, 4]) ➞ False
+    '''
+
+Response:
+    if len(lst) == 1:
+        return True
+    for i in range(len(lst)-1):
+        if lst[i] > lst[i+1]:
+            return False
+    return True
+
+
+def is_sorted(lst):
+    '''
+    Given a list of numbers, return whether or not they are sorted
+    in ascending order. If list has more than 1 duplicate of the same
+    number, return False. Assume no negative numbers and only integers.
+
+    Examples
+    is_sorted([5]) ➞ True
+    is_sorted([1, 2, 3, 4, 5]) ➞ True
+    isorted([1, 3, 2, 4, 5]) ➞ False
+    is_sorted([1, 2, 3, 4, 5, 6]) ➞ True
+    is_sorted([1, 2, 3, 4, 5, 6, 7]) ➞ True
+    is_sorted([1, 3, 2, 4, 5, 6, 7]) ➞ False
+    is_sorted([1, 2, 2, 3, 3, 4]) ➞ True
+    is_sorted([1, 2, 2, 2, 3, 4]) ➞ False
+    '''
+    if len(lst) == 1:
+        return True
+    for i in range(len(lst)-1):
+        if lst[i] > lst[i+1]:
+            return False
+    return True
+
+
+def is_sorted(lst):
+    '''
+    Given a list of numbers, return whether or not they are sorted
+    in ascending order. If list has more than 1 duplicate of the same
+    number, return False. Assume no negative numbers and only integers.
+
+    Examples
+    is_sorted([5]) ➞ True
+    is_sorted([1, 2, 3, 4, 5]) ➞ True
+   
+Task_ID HumanEval/120:
+Prompt:
+
+def maximum(arr, k):
+    """
+    Given an array arr of integers and a positive integer k, return a sorted list 
+    of length k with the maximum k numbers in arr.
+
+    Example 1:
+
+        Input: arr = [-3, -4, 5], k = 3
+        Output: [-4, -3, 5]
+
+    Example 2:
+
+        Input: arr = [4, -4, 4], k = 2
+        Output: [4, 4]
+
+    Example 3:
+
+        Input: arr = [-3, 2, 1, 2, -1, -2, 1], k = 1
+        Output: [2]
+
+    Note:
+        1. The length of the array will be in the range of [1, 1000].
+        2. The elements in the array will be in the range of [-1000, 1000].
+        3. 0 <= k <= len(arr)
+    """
+
+Response:
+    # Time: O(nlogn)
+    # Space: O(n)
+    # arr.sort(reverse=True)
+    # return arr[:k]
+
+    # Time: O(nlogk)
+    # Space: O(k)
+    import heapq
+    heap = []
+    for num in arr:
+        heapq.heappush(heap, num)
+        if len(heap) > k:
+            heapq.heappop(heap)
+    return heap
+
+
+def maximum_2(arr, k):
+    """
+    Given an array arr of integers and a positive integer k, return a sorted list 
+    of length k with the maximum k numbers in arr.
+
+    Example 1:
+
+        Input: arr = [-3, -4, 5], k = 3
+        Output: [-4, -3, 5]
+
+    Example 2:
+
+        Input: arr = [4, -4, 4], k = 2
+        Output: [4, 4]
+
+    Example 3:
+
+        Input: arr = [-3, 2, 1, 2, -1, -2, 1], k = 1
+        Output: [2]
+
+    Note:
+        1. The length of the array will be in the range of [1, 1000].
+        2. The elements in the array will be in the range of [-1000, 1000].
+        3. 0 <= k <= len(arr)
+    """
+    # Time: O(nlogk)
+    # Space: O(k)
+    import heapq
+    heap = []
+    for num in arr:
+        heapq.heappush(heap, num)
+        if len(heap) > k:
+            heapqpop(heap)
+    return heap
+
+
+def maximum_3(arr, k):
+    """
+    Given an array arr of integers and a positive integer k, return a sorted list 
+    of length k with the maximum k numbers in arr.
+
+    Example 1:
+
+        Input: arr = [-3, -4,
