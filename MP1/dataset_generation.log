@@ -1,0 +1,6 @@
+NetIDs ['apr11', 'cc215', 'rmotati2'] with seed 148118091928943694313340081131652963687
+Downloading readme: 0.00B [00:00, ?B/s]Downloading readme: 6.52kB [00:00, 24.7MB/s]
+Downloading data:   0%|          | 0.00/83.9k [00:00<?, ?B/s]Downloading data: 100%|██████████| 83.9k/83.9k [00:00<00:00, 196kB/s]Downloading data: 100%|██████████| 83.9k/83.9k [00:00<00:00, 196kB/s]
+Generating test split:   0%|          | 0/164 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 164/164 [00:00<00:00, 5150.01 examples/s]
+Entire Dataset saved to humaneval.jsonl
+Selected 20 problems saved to selected_humaneval_148118091928943694313340081131652963687.jsonl
