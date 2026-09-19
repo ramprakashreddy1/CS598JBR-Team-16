@@ -65,7 +65,8 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-base", q
         with torch.no_grad():
             outputs = model.generate(
                 input_ids,
-                max_length=500,
+                attention_mask=torch.ones_like(input_ids),
+                max_new_tokens=500,
                 do_sample=False,  # greedy decoding == temperature 0
                 eos_token_id=tokenizer.eos_token_id,
                 pad_token_id=tokenizer.eos_token_id,
