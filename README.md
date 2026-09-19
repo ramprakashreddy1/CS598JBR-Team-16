@@ -1,12 +1,13 @@
 # CS598JBR-Team-0
 
 ## Group members
-- [Team member1], [NetID]
-- [Team member2], [NetID]
-- [Team member3], [NetID]
-- [Team member4], [NetID]
+
+- Ram Prakash Reddy Motat, rmotati2
+- Aditya Prasath Ravilla Shridhar Prasath, Apr11
+- Chandra Sreeja Chinigepall, cc215
 
 ## Link of Google Colab Notebook
+
 - MP1 - [link](URL) (please add the link here)
 - MP2 - [link](URL) (please add the link here)
 - MP3 - [link](URL) (please add the link here)
