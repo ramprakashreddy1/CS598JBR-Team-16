@@ -2,9 +2,9 @@
 
 ## Group members
 
-- Aditya Prasath Ravilla Shridhar Prasath, Apr11
-- Chandra Sreeja Chinigepall, cc215
-- Ram Prakash Reddy Motat, rmotati2
+- Aditya Prasath Ravilla Shridhar Prasath, apr11
+- Chandra Sreeja Chinigepalli, cc215
+- Ram Prakash Reddy Motati, rmotati2
 
 ## Link of Google Colab Notebook
 
