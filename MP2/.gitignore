@@ -1,0 +1,4 @@
+__pycache__/
+.coverage
+.pytest_cache/
+generated_tests/**/*_junit.xml
