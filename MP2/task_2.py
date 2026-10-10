@@ -19,6 +19,7 @@ MP2_DIR = os.path.dirname(os.path.abspath(__file__))
 COVERAGE_DIR = os.path.join(MP2_DIR, "Coverage")
 TESTS_DIR = os.path.join(MP2_DIR, "generated_tests")
 PYTEST_TIMEOUT = 120
+TEST_TIMEOUT = 10
 
 VANILLA_TEMPLATE = '''Generate a pytest test suite for the following code.
 Only write unit tests in the output and nothing else.
@@ -42,9 +43,25 @@ Requirements:
 2. Cover edge cases: empty inputs, a single element, zero, negative numbers, boundary values, and the largest/smallest cases that the code treats specially.
 3. Include every example from the docstring as a test.
 4. Compute each expected value by carefully tracing THIS implementation step by step (it is the ground truth; do not "fix" it). If you are not sure of an expected value, choose a simpler input instead.
-5. Prefer `@pytest.mark.parametrize` with many (input, expected) pairs so that one wrong case does not hide the others. Use `pytest.approx` for floating point results.
-6. Do NOT re-implement or redefine `{entry_point}`, do not use mocks, do not read files or user input.
-7. Write between 10 and 20 test cases in total.
+5. Write each test case as its own top-level test function containing exactly ONE assert, so that one wrong case does not hide the others. Use `pytest.approx` for floating point results.
+6. Do NOT re-implement or redefine `{entry_point}`, do not call the test functions yourself, do not define tests inside other functions, do not use mocks, files or user input.
+7. Write between 10 and 20 test functions in total.
+
+The test file must look like this example (for a different function `add`):
+```python
+import pytest
+from module import *
+
+def test_add_positive():
+    assert add(2, 3) == 5
+
+def test_add_negative():
+    assert add(-2, -3) == -5
+
+def test_add_invalid_type():
+    with pytest.raises(TypeError):
+        add(1, None)
+```
 
 Output a single ```python code block containing only the complete test file.'''
 
@@ -55,7 +72,7 @@ FEEDBACK_TEMPLATE = '''Your previous pytest test suite for the function `{entry_
 {numbered_program}
 ```
 
-Write ADDITIONAL pytest test functions (new names, do not repeat earlier tests) with inputs chosen so that each of the lines above is executed. Trace the implementation carefully to compute the exact expected values so that the tests pass. Use `from {module} import *` to import the function and output a single ```python code block.'''
+Write ADDITIONAL pytest test functions (new names, do not repeat earlier tests) with inputs chosen so that each of the lines above is executed. Trace the implementation carefully to compute the exact expected values so that the tests pass. Each test function must contain exactly one assert, and you must not call the test functions yourself. Use `from {module} import *` to import the function and output a single ```python code block.'''
 
 
 def save_file(content, file_path):
@@ -133,8 +150,12 @@ def clean_test_code(code, entry, module):
     }
     for node in tree.body:
         span = range(node.lineno - 1, node.end_lineno)
+        # Top-level calls such as `test_x()` or `pytest.main()` run at import time and break collection
+        if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
+            for i in span:
+                replace[i] = ""
         # A re-implemented function would hide the real program from coverage
-        if isinstance(node, (ast.FunctionDef, ast.ClassDef)) and node.name in program_names:
+        elif isinstance(node, (ast.FunctionDef, ast.ClassDef)) and node.name in program_names:
             for i in span:
                 replace[i] = ""
         # `from solution import f` / `import solution` -> point to the real module
@@ -150,7 +171,66 @@ def clean_test_code(code, entry, module):
                         replace[i] = ""
                     replace[node.lineno - 1] = f"import {module} as {alias.asname or alias.name}"
     lines = [replace.get(i, line) for i, line in enumerate(lines)]
-    return f"import pytest\nfrom {module} import *\n\n" + "\n".join(lines).strip("\n") + "\n"
+    code = f"import pytest\nfrom {module} import *\n\n" + "\n".join(lines).strip("\n") + "\n"
+    return split_asserts(code)
+
+def contains_assert(node):
+    if any(isinstance(n, ast.Assert) for n in ast.walk(node)):
+        return True
+    # `with pytest.raises(...)` blocks are test cases too
+    return isinstance(node, ast.With) and "raises" in ast.unparse(node.items[0].context_expr)
+
+def split_asserts(code):
+    """Split a test function with several asserts into one test function per assert, so a single wrong
+    expected value does not stop the remaining checks from running. Statements without asserts are kept
+    as setup in front of every later test case."""
+    tree = ast.parse(code)
+    out = []
+    for node in tree.body:
+        is_plain_test = (isinstance(node, ast.FunctionDef) and node.name.startswith("test")
+                         and not node.args.args and not node.decorator_list)
+        units = [s for s in node.body if contains_assert(s)] if is_plain_test else []
+        if len(units) <= 1:
+            out.append(ast.unparse(node))
+            continue
+        setup, k = [], 0
+        for stmt in node.body:
+            if contains_assert(stmt):
+                k += 1
+                body = "\n".join(ast.unparse(s) for s in setup + [stmt])
+                out.append(f"def {node.name}_{k}():\n" + "\n".join("    " + l for l in body.split("\n")))
+            elif not isinstance(stmt, ast.FunctionDef):
+                setup.append(stmt)
+    return "\n\n".join(out) + "\n"
+
+def collects(code, test_dir, module):
+    path = os.path.join(test_dir, f"{module}_collect_test.py")
+    save_file(code, path)
+    try:
+        proc = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q", "-p", "no:cacheprovider",
+                               os.path.basename(path)], cwd=test_dir, capture_output=True, text=True, timeout=60)
+        return proc.returncode in (0, 5)
+    except subprocess.TimeoutExpired:
+        return False
+    finally:
+        os.remove(path)
+
+def repair_collection(code, test_dir, module):
+    """If pytest cannot even collect the file (e.g. a malformed parametrize), keep only the top-level
+    statements that collect, instead of losing the whole suite."""
+    if collects(code, test_dir, module):
+        return code
+    tree = ast.parse(code)
+    kept = [ast.unparse(n) for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
+    for node in tree.body:
+        if isinstance(node, (ast.Import, ast.ImportFrom)):
+            continue
+        candidate = kept + [ast.unparse(node)]
+        if collects("\n\n".join(candidate) + "\n", test_dir, module):
+            kept = candidate
+        else:
+            print(f"Dropped a statement that breaks test collection:\n{ast.unparse(node)[:300]}")
+    return "\n\n".join(kept) + "\n"
 
 def run_tests(module, test_dir, vanilla):
     """Run pytest with coverage on {ID}_test.py and return coverage, test counts and missing lines."""
@@ -162,6 +242,9 @@ def run_tests(module, test_dir, vanilla):
             os.remove(f)
     cmd = [sys.executable, "-m", "pytest", f"{module}_test.py", "--cov", module,
            "--cov-report", f"json:{cov_report}", f"--junitxml={junit}", "-q", "-p", "no:cacheprovider"]
+    if importlib.util.find_spec("pytest_timeout"):
+        # A single test with a huge input must not stop the whole report from being written
+        cmd.append(f"--timeout={TEST_TIMEOUT}")
     print("Running:", " ".join(cmd))
     try:
         proc = subprocess.run(cmd, cwd=test_dir, capture_output=True, text=True, timeout=PYTEST_TIMEOUT)
@@ -252,7 +335,7 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         prompt, response = generate(model, tokenizer, instruction, 1024 if vanilla else 1536)
 
         # TODO: process the response, generate coverage and save it to results
-        test_code = clean_test_code(extract_code(response), entry, module)
+        test_code = repair_collection(clean_test_code(extract_code(response), entry, module), test_dir, module)
         save_file(test_code, os.path.join(test_dir, f"{module}_test.py"))
         stats = run_tests(module, test_dir, vanilla)
 
@@ -267,7 +350,8 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
             )
             feedback_prompt, feedback_response = generate(model, tokenizer, feedback_instruction, 1024)
             extra = clean_test_code(extract_code(feedback_response), entry, module)
-            test_code = test_code + "\n\n# ---- additional tests from coverage feedback ----\n" + rename_tests(extra, "_extra")
+            merged = test_code + "\n\n# ---- additional tests from coverage feedback ----\n" + rename_tests(extra, "_extra")
+            test_code = repair_collection(merged, test_dir, module)
             save_file(test_code, os.path.join(test_dir, f"{module}_test.py"))
             stats = run_tests(module, test_dir, vanilla)
         coverage = stats["coverage"]
