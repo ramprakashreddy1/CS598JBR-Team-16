@@ -6,8 +6,7 @@
 ! git clone https://github.com/ramprakashreddy1/CS598JBR-Team-16.git
 %cd CS598JBR-Team-16/MP2
 
-# TODO: Replace the file path of selected_humaneval_[seed].jsonl generated in MP1
-input_dataset = "selected_humaneval_148118091928943694313340081131652963687.jsonl"
+input_dataset = "../MP1/selected_humaneval_148118091928943694313340081131652963687.jsonl"
 
 # Set up requirements for model prompting
 ! bash -x setup_models.sh
