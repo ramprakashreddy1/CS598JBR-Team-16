@@ -1,12 +1,14 @@
 import jsonlines
+import os
 import sys
+# Must be set before torch initialises CUDA; reduces fragmentation-related OOMs on a 15 GB T4
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
 import ast
 import importlib.util
 import json
-import os
 import re
 import subprocess
 import xml.etree.ElementTree as ET
@@ -153,6 +155,11 @@ def clean_test_code(code, entry, module):
         span = range(node.lineno - 1, node.end_lineno)
         # Top-level calls such as `test_x()` or `pytest.main()` run at import time and break collection
         if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
+            for i in span:
+                replace[i] = ""
+        # Likewise a generated `if __name__ == "__main__":` runner
+        elif (isinstance(node, ast.If) and isinstance(node.test, ast.Compare)
+              and isinstance(node.test.left, ast.Name) and node.test.left.id == "__name__"):
             for i in span:
                 replace[i] = ""
         # A re-implemented function would hide the real program from coverage
@@ -316,8 +323,14 @@ def generate(model, tokenizer, instruction, max_new_tokens):
         )
     return prompt, tokenizer.decode(outputs[0][input_ids.shape[1]:], skip_special_tokens=True)
 
-def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
+def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True, output_file = None):
     print(f"Working with {model_name} prompt type {vanilla}...")
+
+    if not torch.cuda.is_available():
+        raise RuntimeError("DeepSeekCoder-6.7B 4-bit inference needs an NVIDIA GPU "
+                           "(Colab: Runtime > Change runtime type > T4 GPU).")
+    compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    print(f"GPU: {torch.cuda.get_device_name(0)}, PyTorch CUDA: {torch.version.cuda}, compute dtype: {compute_dtype}")
 
     # TODO: download the model
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
@@ -326,13 +339,14 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         load_in_4bit=True,
         bnb_4bit_use_double_quant=True,
         bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.bfloat16,
+        bnb_4bit_compute_dtype=compute_dtype,
     )
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         quantization_config=bnb_config,
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=compute_dtype,
+        low_cpu_mem_usage=True,
         trust_remote_code=True,
     )
 
@@ -398,6 +412,9 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
             "num_failed": stats["num_failed"],
             "missing_lines": stats["missing_lines"],
         })
+        # Checkpoint after every problem so a Colab disconnect does not lose finished results
+        if output_file:
+            write_jsonl(results, output_file)
 
     return results
 
@@ -443,5 +460,5 @@ if __name__ == "__main__":
     vanilla = True if if_vanilla == "True" else False
 
     dataset = read_jsonl(input_dataset)
-    results = prompt_model(dataset, model, vanilla)
+    results = prompt_model(dataset, model, vanilla, output_file)
     write_jsonl(results, output_file)

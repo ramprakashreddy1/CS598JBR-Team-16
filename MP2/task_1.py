@@ -1,5 +1,8 @@
 import jsonlines
+import os
 import sys
+# Must be set before torch initialises CUDA; reduces fragmentation-related OOMs on a 15 GB T4
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
@@ -206,8 +209,24 @@ def build_prompt(entry, inputs, vanilla):
     call = f"{entry['entry_point']}({inputs})"
     return CRAFTED_TEMPLATE.format(example=FEW_SHOT_EXAMPLE, program=program, call=call)
 
-def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True):
+def generate_sample(model, input_ids, gen_kwargs):
+    """One sampled reasoning path, or None if it does not fit in GPU memory (the vote then uses fewer samples)."""
+    try:
+        return model.generate(input_ids, do_sample=True, temperature=0.6, top_p=0.95, **gen_kwargs)
+    except torch.OutOfMemoryError:
+        print("Skipped one self-consistency sample: CUDA out of memory")
+        return None
+    finally:
+        torch.cuda.empty_cache()
+
+def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True, output_file = None):
     print(f"Working with {model_name} prompt type {vanilla}...")
+
+    if not torch.cuda.is_available():
+        raise RuntimeError("DeepSeekCoder-6.7B 4-bit inference needs an NVIDIA GPU "
+                           "(Colab: Runtime > Change runtime type > T4 GPU).")
+    compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    print(f"GPU: {torch.cuda.get_device_name(0)}, PyTorch CUDA: {torch.version.cuda}, compute dtype: {compute_dtype}")
 
     # TODO: download the model
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
@@ -216,15 +235,18 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         load_in_4bit=True,
         bnb_4bit_use_double_quant=True,
         bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.bfloat16,
+        bnb_4bit_compute_dtype=compute_dtype,
     )
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         quantization_config=bnb_config,
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=compute_dtype,
+        low_cpu_mem_usage=True,
         trust_remote_code=True,
     )
+    # Makes the self-consistency samples reproducible
+    torch.manual_seed(SELECTION_SEED)
 
     results = []
     for entry in dataset:
@@ -250,12 +272,16 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         )
         with torch.no_grad():
             outputs = model.generate(input_ids, do_sample=False, **gen_kwargs)
-            if not vanilla and SC_SAMPLES:
-                sampled = model.generate(input_ids, do_sample=True, temperature=0.6, top_p=0.95,
-                                         num_return_sequences=SC_SAMPLES, **gen_kwargs)
-        responses = [tokenizer.decode(outputs[0][input_ids.shape[1]:], skip_special_tokens=True)]
-        if not vanilla and SC_SAMPLES:
-            responses += [tokenizer.decode(s[input_ids.shape[1]:], skip_special_tokens=True) for s in sampled]
+            responses = [tokenizer.decode(outputs[0][input_ids.shape[1]:], skip_special_tokens=True)]
+            del outputs
+            torch.cuda.empty_cache()
+            if not vanilla:
+                # One sample at a time: batching them runs out of memory on a 15 GB T4 for long prompts
+                for _ in range(SC_SAMPLES):
+                    sampled = generate_sample(model, input_ids, gen_kwargs)
+                    if sampled is not None:
+                        responses.append(tokenizer.decode(sampled[0][input_ids.shape[1]:], skip_special_tokens=True))
+                        del sampled
 
         # TODO: process the response and save it to results
         if vanilla:
@@ -277,6 +303,9 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
             "votes": votes,
             "all_responses": responses,
         })
+        # Checkpoint after every problem so a Colab disconnect does not lose finished results
+        if output_file:
+            write_jsonl(results, output_file)
 
     return results
 
@@ -322,5 +351,5 @@ if __name__ == "__main__":
     vanilla = True if if_vanilla == "True" else False
 
     dataset = read_jsonl(input_dataset)
-    results = prompt_model(dataset, model, vanilla)
+    results = prompt_model(dataset, model, vanilla, output_file)
     write_jsonl(results, output_file)

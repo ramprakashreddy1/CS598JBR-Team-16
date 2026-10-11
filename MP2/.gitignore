@@ -3,3 +3,4 @@ __pycache__/
 .pytest_cache/
 generated_tests/**/*_junit.xml
 *.ipynb
+temp/
