@@ -54,7 +54,7 @@ Example 2:
 def g(s, words):
     nums = [int(t) for t in s.split() if t.isdigit()]
     ranked = sorted(words, key=lambda w: (len(w), w))
-    return sum(nums), ranked[:2]
+    return ranked[:2] + [sum(nums)]
 ```
 Function call: g("3 cats and 12 dogs", ["pear", "fig", "apple", "kiwi"])
 
@@ -66,8 +66,8 @@ Step-by-step execution:
 5. Sort keys: "pear" -> (4, 'pear'), "fig" -> (3, 'fig'), "apple" -> (5, 'apple'), "kiwi" -> (4, 'kiwi')
 6. Ascending by key: (3, 'fig') < (4, 'kiwi') < (4, 'pear') < (5, 'apple'), so ranked = ['fig', 'kiwi', 'pear', 'apple']
 7. ranked[:2] = ['fig', 'kiwi'], sum(nums) = 3 + 12 = 15
-8. `return sum(nums), ranked[:2]` returns the tuple (15, ['fig', 'kiwi'])
-[Output](15, ['fig', 'kiwi'])[/Output]
+8. `return ranked[:2] + [sum(nums)]` concatenates two lists, so it returns the list ['fig', 'kiwi', 15] (square brackets, because it is a list)
+[Output]['fig', 'kiwi', 15][/Output]
 '''
 
 CRAFTED_TEMPLATE = '''You are an expert Python interpreter. Your job is to simulate the execution of a Python function on a concrete input, exactly as CPython would, and report the value it returns.
@@ -79,7 +79,8 @@ Rules:
 4. If a loop has too many iterations to list (for example nested loops over range(2, 101)), do not guess: work out which iteration first makes the condition true and show why.
 5. Be careful with Python semantics: `range(a, b)` excludes `b`, indexing starts at 0, negative indices count from the end, `//` floors, `%` with negatives, `sorted()`/`sort()` order and `key=` functions (ties keep their original order), string methods such as `split()` and `isdigit()`, integer vs float results, and tuples vs lists.
 6. Base your answer ONLY on what the code actually does, not on the function name or the docstring (the docstring is only a hint).
-7. After the trace, write the exact return value as a Python literal (for example 5, 2.5, 'abc', [1, 2], (3, None), True) between [Output] and [/Output] tags, then stop. Solve only this one task.
+7. Keep the exact type of the return value: a list (from `[...]`, `append`, list comprehensions, slicing a list, `sorted()`) must be written with square brackets [1, 2]; only a real tuple (e.g. `return a, b`) is written with parentheses (1, 2).
+8. After the trace, write the exact return value as a Python literal (for example 5, 2.5, 'abc', [1, 2], (3, None), True) between [Output] and [/Output] tags, then stop. Write the value itself, not the function call. Solve only this one task.
 
 {example}
 Now solve the following task.

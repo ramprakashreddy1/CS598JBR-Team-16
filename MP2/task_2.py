@@ -20,6 +20,7 @@ COVERAGE_DIR = os.path.join(MP2_DIR, "Coverage")
 TESTS_DIR = os.path.join(MP2_DIR, "generated_tests")
 PYTEST_TIMEOUT = 120
 TEST_TIMEOUT = 10
+SLOW_TEST_LIMIT = 15
 
 VANILLA_TEMPLATE = '''Generate a pytest test suite for the following code.
 Only write unit tests in the output and nothing else.
@@ -40,7 +41,7 @@ from {module} import *
 Requirements:
 1. Exercise every decision point of the implementation. Write at least one test that makes each of the following conditions True and at least one that makes it False:
 {branches}
-2. Cover edge cases: empty inputs, a single element, zero, negative numbers, boundary values, and the largest/smallest cases that the code treats specially.
+2. Cover edge cases: empty inputs, a single element, zero, negative numbers, boundary values, and the largest/smallest cases that the code treats specially. Keep inputs small (no values like 10**9 or 2147483647) so that every test runs in well under a second.
 3. Include every example from the docstring as a test.
 4. Compute each expected value by carefully tracing THIS implementation step by step (it is the ground truth; do not "fix" it). If you are not sure of an expected value, choose a simpler input instead.
 5. Write each test case as its own top-level test function containing exactly ONE assert, so that one wrong case does not hide the others. Use `pytest.approx` for floating point results.
@@ -246,12 +247,23 @@ def run_tests(module, test_dir, vanilla):
         # A single test with a huge input must not stop the whole report from being written
         cmd.append(f"--timeout={TEST_TIMEOUT}")
     print("Running:", " ".join(cmd))
+    slow = []
     try:
         proc = subprocess.run(cmd, cwd=test_dir, capture_output=True, text=True, timeout=PYTEST_TIMEOUT)
         print(proc.stdout[-3000:])
         print(proc.stderr[-1000:])
     except subprocess.TimeoutExpired:
-        print(f"pytest timed out after {PYTEST_TIMEOUT}s")
+        # pytest-timeout cannot interrupt long C-level calls such as sum(range(2**31)),
+        # so find those tests, deselect them (they count as failed) and run the rest again
+        print(f"pytest timed out after {PYTEST_TIMEOUT}s, looking for slow tests")
+        slow = find_slow_tests(module, test_dir)
+        print("Deselected slow tests:", slow)
+        cmd += [arg for node_id in slow for arg in ("--deselect", node_id)]
+        try:
+            proc = subprocess.run(cmd, cwd=test_dir, capture_output=True, text=True, timeout=PYTEST_TIMEOUT)
+            print(proc.stdout[-3000:])
+        except subprocess.TimeoutExpired:
+            print(f"pytest timed out again after {PYTEST_TIMEOUT}s")
 
     stats = {"coverage": 0.0, "missing_lines": [], "num_tests": 0, "num_passed": 0, "num_failed": 0}
     if os.path.exists(cov_report):
@@ -267,10 +279,23 @@ def run_tests(module, test_dir, vanilla):
         total = int(suite.get("tests", 0))
         failed = int(suite.get("failures", 0)) + int(suite.get("errors", 0))
         skipped = int(suite.get("skipped", 0))
-        stats["num_tests"] = total
-        stats["num_failed"] = failed
+        stats["num_tests"] = total + len(slow)
+        stats["num_failed"] = failed + len(slow)
         stats["num_passed"] = total - failed - skipped
     return stats
+
+def find_slow_tests(module, test_dir):
+    proc = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q", "-p", "no:cacheprovider",
+                           f"{module}_test.py"], cwd=test_dir, capture_output=True, text=True, timeout=60)
+    node_ids = [line.strip() for line in proc.stdout.splitlines() if "::" in line]
+    slow = []
+    for node_id in node_ids:
+        try:
+            subprocess.run([sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", node_id],
+                           cwd=test_dir, capture_output=True, text=True, timeout=SLOW_TEST_LIMIT)
+        except subprocess.TimeoutExpired:
+            slow.append(node_id)
+    return slow
 
 def rename_tests(code, suffix):
     return re.sub(r"^(\s*)(def|class) ((?:test_|Test)\w*)", rf"\1\2 \3{suffix}", code, flags=re.MULTILINE)
