@@ -9,5 +9,5 @@
 ## Link of Google Colab Notebook
 
 - MP1 - [link](https://colab.research.google.com/drive/1I8JNHZLcOU9YCuBsQoqX-iL2TICuMYnQ?usp=sharing)
-- MP2 - [link](URL) (please add the link here)
+- MP2 - [link](https://colab.research.google.com/drive/1WbBxahl4VxsuVUCEKU0nWJZ4BUob8_EQ?usp=sharing)
 - MP3 - [link](URL) (please add the link here)
