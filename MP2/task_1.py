@@ -1,12 +1,10 @@
 import jsonlines
-import os
 import sys
-# Must be set before torch initialises CUDA; reduces fragmentation-related OOMs on a 15 GB T4
-os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
 import ast
+from collections import Counter
 import math
 import random
 import re
@@ -17,75 +15,66 @@ import re
 
 # Fixed seed so vanilla and crafted runs pick the same assertion per problem
 SELECTION_SEED = 598
+CRAFTED_SAMPLES = 5
 
-# Self-consistency: besides the greedy answer, sample this many extra reasoning paths and take a majority vote
-SC_SAMPLES = 4
+FEW_SHOT_EXAMPLE = '''Here is an example of how to solve this kind of task.
 
-FEW_SHOT_EXAMPLE = '''Here are two examples of how to solve this kind of task.
-
-Example 1:
 ```python
-def f(n):
-    for d in reversed(range(2, n)):
-        if n % d == 0:
-            return d
-    return 1
+def f(nums):
+    total = 0
+    for i, x in enumerate(nums):
+        if x % 2 == 0:
+            total += x * i
+    return total
 ```
-Function call: f(21)
+Function call: f([3, 4, 6])
 
 Step-by-step execution:
-1. Bind the arguments: n = 21
-2. `range(2, 21)` is 2, 3, ..., 20 (21 is excluded), so `reversed(range(2, 21))` is 20, 19, ..., 2
-3. d=20: 21 % 20 = 1, `1 == 0` -> False
-4. d=19: 21 % 19 = 2, `2 == 0` -> False
-5. d=18: 21 % 18 = 3 -> False
-6. d=17: 21 % 17 = 4 -> False
-7. d=16: 21 % 16 = 5 -> False
-8. d=15: 21 % 15 = 6 -> False
-9. d=14: 21 % 14 = 7 -> False
-10. d=13: 21 % 13 = 8 -> False
-11. d=12: 21 % 12 = 9 -> False
-12. d=11: 21 % 11 = 10 -> False
-13. d=10: 21 % 10 = 1 -> False
-14. d=9: 21 % 9 = 3 -> False
-15. d=8: 21 % 8 = 5 -> False
-16. d=7: 21 % 7 = 0, `0 == 0` -> True, so `return d` returns 7 immediately
-[Output]7[/Output]
+1. Bind the arguments: nums = [3, 4, 6]
+2. total = 0
+3. Loop iteration i=0, x=3: condition `3 % 2 == 0` -> 1 == 0 -> False, total stays 0
+4. Loop iteration i=1, x=4: condition `4 % 2 == 0` -> 0 == 0 -> True, total = 0 + 4 * 1 = 4
+5. Loop iteration i=2, x=6: condition `6 % 2 == 0` -> 0 == 0 -> True, total = 4 + 6 * 2 = 16
+6. Loop ends. `return total` returns 16
+[Output]16[/Output]
+'''
 
-Example 2:
+TYPE_AND_CONTROL_FLOW_EXAMPLE = '''Here is a second example. It demonstrates early returns and preserving the exact return type.
+
 ```python
-def g(s, words):
-    nums = [int(t) for t in s.split() if t.isdigit()]
-    ranked = sorted(words, key=lambda w: (len(w), w))
-    return ranked[:2] + [sum(nums)]
+def g(values):
+    result = []
+    for value in values:
+        if value < 0:
+            return tuple(result)
+        result.append(value // 2)
+    return result
 ```
-Function call: g("3 cats and 12 dogs", ["pear", "fig", "apple", "kiwi"])
+Function call: g([5, 2, -1, 8])
 
 Step-by-step execution:
-1. Bind the arguments: s = "3 cats and 12 dogs", words = ["pear", "fig", "apple", "kiwi"]
-2. s.split() = ['3', 'cats', 'and', '12', 'dogs']
-3. '3'.isdigit() -> True, 'cats'.isdigit() -> False, 'and'.isdigit() -> False, '12'.isdigit() -> True, 'dogs'.isdigit() -> False
-4. nums = [3, 12]
-5. Sort keys: "pear" -> (4, 'pear'), "fig" -> (3, 'fig'), "apple" -> (5, 'apple'), "kiwi" -> (4, 'kiwi')
-6. Ascending by key: (3, 'fig') < (4, 'kiwi') < (4, 'pear') < (5, 'apple'), so ranked = ['fig', 'kiwi', 'pear', 'apple']
-7. ranked[:2] = ['fig', 'kiwi'], sum(nums) = 3 + 12 = 15
-8. `return ranked[:2] + [sum(nums)]` concatenates two lists, so it returns the list ['fig', 'kiwi', 15] (square brackets, because it is a list)
-[Output]['fig', 'kiwi', 15][/Output]
+1. Bind the arguments: values = [5, 2, -1, 8]
+2. result = []
+3. value=5: `5 < 0` -> False; append `5 // 2`, so result = [2]
+4. value=2: `2 < 0` -> False; append `2 // 2`, so result = [2, 1]
+5. value=-1: `-1 < 0` -> True; execute `return tuple(result)` and stop immediately
+6. The exact return value is the tuple (2, 1), not the list [2, 1]. The value 8 is never visited.
+[Output](2, 1)[/Output]
 '''
 
 CRAFTED_TEMPLATE = '''You are an expert Python interpreter. Your job is to simulate the execution of a Python function on a concrete input, exactly as CPython would, and report the value it returns.
 
 Rules:
 1. Start by binding every parameter to its argument value.
-2. Execute the code statement by statement. Never summarize a loop ("loop through the list..."): write one line per iteration with the concrete values of the loop variable(s) and of every variable that changes. For every `if`/`while` condition, substitute the concrete values and evaluate it to True or False before choosing a branch.
-3. When a `return` statement executes, the function stops immediately.
-4. If a loop has too many iterations to list (for example nested loops over range(2, 101)), do not guess: work out which iteration first makes the condition true and show why.
-5. Be careful with Python semantics: `range(a, b)` excludes `b`, indexing starts at 0, negative indices count from the end, `//` floors, `%` with negatives, `sorted()`/`sort()` order and `key=` functions (ties keep their original order), string methods such as `split()` and `isdigit()`, integer vs float results, and tuples vs lists.
-6. Base your answer ONLY on what the code actually does, not on the function name or the docstring (the docstring is only a hint).
-7. Keep the exact type of the return value: a list (from `[...]`, `append`, list comprehensions, slicing a list, `sorted()`) must be written with square brackets [1, 2]; only a real tuple (e.g. `return a, b`) is written with parentheses (1, 2).
-8. After the trace, write the exact return value as a Python literal (for example 5, 2.5, 'abc', [1, 2], (3, None), True) between [Output] and [/Output] tags, then stop. Write the value itself, not the function call. Solve only this one task.
+2. Execute the code statement by statement. For every loop iteration write the loop variable(s) and every variable that changes. For every `if`/`while` condition, evaluate it explicitly to True or False before choosing a branch.
+3. Be careful with Python semantics: `range(a, b)` excludes `b`, indexing starts at 0, negative indices count from the end, `//` floors, `%` with negatives, `sorted()`/`sort()` order and `key=` functions, string methods, and integer vs float results.
+4. Preserve the exact return type. A list and tuple with the same elements are different answers; so are `True` and `1`.
+5. A `return` stops the current function immediately. Never execute later statements, loop iterations, or branches after it. Re-evaluate conditions using the current variable values instead of assuming a branch runs.
+6. Base your answer ONLY on the supplied function call and what the code actually does. Do not solve examples from the docstring, invent a second input, or continue with another task.
+7. Check the final value once against your trace. Then write it as a Python literal (for example 5, 2.5, 'abc', [1, 2], (3, None), True) between [Output] and [/Output] tags.
+8. Emit exactly one [Output] block as the final line, and stop generating immediately after `[/Output]`.
 
-{example}
+{examples}
 Now solve the following task.
 
 ```python
@@ -151,15 +140,37 @@ def select_test(entry):
     return rng.choice(candidates)
 
 def extract_prediction(response):
-    """Return the text inside the first [Output]...[/Output] block (tolerating [\\Output] and missing close tags).
-    The first block is the answer; anything after it is the model running on into made-up follow-up tasks."""
+    """Return the first answer block, ignoring any continuation the model invents afterward."""
     matches = re.findall(r"\[Output\](.*?)\[[/\\]Output\]", response, re.DOTALL | re.IGNORECASE)
     if matches:
         return matches[0].strip()
     tail = re.split(r"\[Output\]", response, flags=re.IGNORECASE)
     if len(tail) > 1:
-        return tail[-1].strip().split("\n")[0].strip()
+        return tail[1].strip().split("\n")[0].strip()
     return response.strip().split("\n")[-1].strip() if response.strip() else ""
+
+def prediction_vote_key(prediction):
+    """Canonicalize a prediction so equivalent spellings share a majority vote."""
+    pred = prediction.strip().strip("`").strip()
+    pred = re.sub(r"^(python\s+)", "", pred)
+    try:
+        value = ast.literal_eval(pred)
+    except Exception:
+        # Treat an unquoted generated string like the corresponding string literal.
+        return ("str", pred.strip("'\""))
+    if isinstance(value, str):
+        return ("str", value)
+    return (type(value).__name__, repr(value))
+
+def select_majority(predictions):
+    """Return the earliest prediction in the largest equivalence class and its vote count."""
+    if not predictions:
+        return "", 0, 0
+    keys = [prediction_vote_key(prediction) for prediction in predictions]
+    counts = Counter(keys)
+    winning_key = max(counts, key=lambda key: counts[key])
+    winning_index = keys.index(winning_key)
+    return predictions[winning_index], winning_index, counts[winning_key]
 
 def values_equal(a, b):
     if isinstance(a, bool) or isinstance(b, bool):
@@ -183,50 +194,52 @@ def check_prediction(prediction, expected):
     # Accept a string answer written without the right quoting style
     return isinstance(expected, str) and str(value) == expected
 
-def normalize_prediction(prediction):
-    pred = prediction.strip().strip("`").strip()
-    try:
-        return repr(ast.literal_eval(pred))
-    except Exception:
-        return pred.strip("'\"")
-
-def majority_vote(responses):
-    """Pick the most common predicted value; ties go to the earliest response (the greedy one)."""
-    predictions = [extract_prediction(r) for r in responses]
-    keys = [normalize_prediction(p) for p in predictions]
-    counts = {}
-    for k in keys:
-        counts[k] = counts.get(k, 0) + 1
-    winner = max(counts, key=lambda k: (counts[k], -keys.index(k)))
-    i = keys.index(winner)
-    return responses[i], predictions[i], counts
-
 def build_prompt(entry, inputs, vanilla):
     if vanilla:
         program = strip_docstrings(entry["prompt"] + entry["canonical_solution"])
         return VANILLA_TEMPLATE.format(inputs=inputs, program=program)
     program = (entry["prompt"] + entry["canonical_solution"]).strip("\n")
     call = f"{entry['entry_point']}({inputs})"
-    return CRAFTED_TEMPLATE.format(example=FEW_SHOT_EXAMPLE, program=program, call=call)
+    examples = FEW_SHOT_EXAMPLE + "\n" + TYPE_AND_CONTROL_FLOW_EXAMPLE
+    return CRAFTED_TEMPLATE.format(examples=examples, program=program, call=call)
 
-def generate_sample(model, input_ids, gen_kwargs):
-    """One sampled reasoning path, or None if it does not fit in GPU memory (the vote then uses fewer samples)."""
-    try:
-        return model.generate(input_ids, do_sample=True, temperature=0.6, top_p=0.95, **gen_kwargs)
-    except torch.OutOfMemoryError:
-        print("Skipped one self-consistency sample: CUDA out of memory")
-        return None
-    finally:
-        torch.cuda.empty_cache()
+def generate_response(model, tokenizer, prompt, max_new_tokens, sample_seed=None):
+    """Generate one response; separate calls keep self-consistency sampling memory-safe."""
+    input_ids = tokenizer(prompt, return_tensors="pt", add_special_tokens=False).input_ids.to(model.device)
+    generate_args = {
+        "input_ids": input_ids,
+        "attention_mask": torch.ones_like(input_ids),
+        "max_new_tokens": max_new_tokens,
+        "eos_token_id": tokenizer.eos_token_id,
+        "pad_token_id": tokenizer.eos_token_id,
+    }
+    if sample_seed is None:
+        generate_args["do_sample"] = False
+    else:
+        torch.manual_seed(sample_seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(sample_seed)
+        generate_args.update(do_sample=True, temperature=0.25, top_p=0.9)
+    with torch.no_grad():
+        outputs = model.generate(**generate_args)
+    response = tokenizer.decode(outputs[0][input_ids.shape[1]:], skip_special_tokens=True)
+    del outputs, input_ids
+    return response
 
 def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct", vanilla = True, output_file = None):
     print(f"Working with {model_name} prompt type {vanilla}...")
 
     if not torch.cuda.is_available():
-        raise RuntimeError("DeepSeekCoder-6.7B 4-bit inference needs an NVIDIA GPU "
-                           "(Colab: Runtime > Change runtime type > T4 GPU).")
+        raise RuntimeError(
+            "DeepSeekCoder-6.7B 4-bit inference requires an NVIDIA GPU. "
+            "In Colab select Runtime > Change runtime type > T4 GPU, "
+            "restart the runtime, and rerun all cells."
+        )
+
     compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
-    print(f"GPU: {torch.cuda.get_device_name(0)}, PyTorch CUDA: {torch.version.cuda}, compute dtype: {compute_dtype}")
+    print(f"GPU: {torch.cuda.get_device_name(0)}")
+    print(f"PyTorch CUDA: {torch.version.cuda}")
+    print(f"4-bit compute dtype: {compute_dtype}")
 
     # TODO: download the model
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
@@ -245,8 +258,6 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
         low_cpu_mem_usage=True,
         trust_remote_code=True,
     )
-    # Makes the self-consistency samples reproducible
-    torch.manual_seed(SELECTION_SEED)
 
     results = []
     for entry in dataset:
@@ -260,38 +271,31 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
             [{"role": "user", "content": instruction}], add_generation_prompt=True, tokenize=False
         )
 
-        # TODO: prompt the model and get the response
-        input_ids = tokenizer(prompt, return_tensors="pt", add_special_tokens=False).input_ids.to(model.device)
-        gen_kwargs = dict(
-            attention_mask=torch.ones_like(input_ids),
-            max_new_tokens=512 if vanilla else 1536,
-            eos_token_id=tokenizer.eos_token_id,
-            pad_token_id=tokenizer.eos_token_id,
-            stop_strings=["[/Output]"],
-            tokenizer=tokenizer,
-        )
-        with torch.no_grad():
-            outputs = model.generate(input_ids, do_sample=False, **gen_kwargs)
-            responses = [tokenizer.decode(outputs[0][input_ids.shape[1]:], skip_special_tokens=True)]
-            del outputs
-            torch.cuda.empty_cache()
-            if not vanilla:
-                # One sample at a time: batching them runs out of memory on a 15 GB T4 for long prompts
-                for _ in range(SC_SAMPLES):
-                    sampled = generate_sample(model, input_ids, gen_kwargs)
-                    if sampled is not None:
-                        responses.append(tokenizer.decode(sampled[0][input_ids.shape[1]:], skip_special_tokens=True))
-                        del sampled
+        # Keep the vanilla baseline unchanged. For the crafted condition, generate
+        # five samples sequentially and select the majority answer without looking
+        # at the ground truth. Sequential generation avoids retaining five large
+        # decoder outputs on the GPU at once.
+        if vanilla:
+            responses = [generate_response(model, tokenizer, prompt, 512)]
+        else:
+            task_seed = sum((i + 1) * ord(ch) for i, ch in enumerate(entry["task_id"]))
+            responses = [
+                generate_response(
+                    model, tokenizer, prompt, 1536,
+                    sample_seed=SELECTION_SEED * 10000 + task_seed + sample_index,
+                )
+                for sample_index in range(CRAFTED_SAMPLES)
+            ]
 
         # TODO: process the response and save it to results
-        if vanilla:
-            response, prediction, votes = responses[0], extract_prediction(responses[0]), {}
-        else:
-            response, prediction, votes = majority_vote(responses)
+        predictions = [extract_prediction(response) for response in responses]
+        prediction, chosen_index, vote_count = select_majority(predictions)
+        response = responses[chosen_index]
         verdict = check_prediction(prediction, expected)
 
         print(f"Task_ID {entry['task_id']}:\nprompt:\n{prompt}\nresponse:\n{response}\nis_correct:\n{verdict}")
-        print(f"input: {inputs}\nexpected: {expected!r}\nprediction: {prediction}\nvotes: {votes}\n")
+        print(f"input: {inputs}\nexpected: {expected!r}\npredictions: {predictions}")
+        print(f"selected prediction: {prediction} ({vote_count}/{len(predictions)} votes)\n")
         results.append({
             "task_id": entry["task_id"],
             "prompt": prompt,
@@ -300,10 +304,12 @@ def prompt_model(dataset, model_name = "deepseek-ai/deepseek-coder-6.7b-instruct
             "input": inputs,
             "expected_output": repr(expected),
             "prediction": prediction,
-            "votes": votes,
-            "all_responses": responses,
+            "sample_predictions": predictions,
+            "sample_responses": responses,
+            "majority_votes": vote_count,
         })
-        # Checkpoint after every problem so a Colab disconnect does not lose finished results
+        # Checkpoint after every problem so a Colab interruption does not lose
+        # all completed results. The final write in main remains as a safeguard.
         if output_file:
             write_jsonl(results, output_file)
 
