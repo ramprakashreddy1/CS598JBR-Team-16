@@ -1,0 +1,70 @@
+{
+  "project": "/Users/ram/Desktop/UIUC/Fall 2026/CS598_LLM/CS598JBR-Team-16/MP4/translations/project_1",
+  "totals": {
+    "unsafe_lines": 0,
+    "unsafe_calls": 0,
+    "unsafe_casts": 0,
+    "pointer_arithmetic": 0,
+    "unsafe_blocks": 0,
+    "unsafe_fns": 0,
+    "unsafe_impls_or_traits": 0,
+    "raw_pointer_types": 0,
+    "ffi_extern_blocks": 0,
+    "transmutes": 0,
+    "manual_alloc": 0,
+    "unwrap_calls": 0,
+    "expect_calls": 0,
+    "panic_macros": 0,
+    "clone_calls": 0,
+    "unimplemented_or_todo": 0,
+    "loc": 239,
+    "forbid_unsafe_code": true,
+    "primary_total": 0,
+    "files": [
+      "src/base122.rs",
+      "src/lib.rs"
+    ]
+  },
+  "per_file": {
+    "src/base122.rs": {
+      "unsafe_lines": 0,
+      "unsafe_calls": 0,
+      "unsafe_casts": 0,
+      "pointer_arithmetic": 0,
+      "unsafe_blocks": 0,
+      "unsafe_fns": 0,
+      "unsafe_impls_or_traits": 0,
+      "raw_pointer_types": 0,
+      "ffi_extern_blocks": 0,
+      "transmutes": 0,
+      "manual_alloc": 0,
+      "unwrap_calls": 0,
+      "expect_calls": 0,
+      "panic_macros": 0,
+      "clone_calls": 0,
+      "unimplemented_or_todo": 0,
+      "loc": 237
+    },
+    "src/lib.rs": {
+      "unsafe_lines": 0,
+      "unsafe_calls": 0,
+      "unsafe_casts": 0,
+      "pointer_arithmetic": 0,
+      "unsafe_blocks": 0,
+      "unsafe_fns": 0,
+      "unsafe_impls_or_traits": 0,
+      "raw_pointer_types": 0,
+      "ffi_extern_blocks": 0,
+      "transmutes": 0,
+      "manual_alloc": 0,
+      "unwrap_calls": 0,
+      "expect_calls": 0,
+      "panic_macros": 0,
+      "clone_calls": 0,
+      "unimplemented_or_todo": 0,
+      "loc": 2,
+      "forbid_unsafe_code": true,
+      "deny_unsafe_code": false
+    }
+  }
+}

@@ -1,0 +1,10 @@
+first 8 deals from seed 3 : ['Heart9', 'SpadeAce', 'Heart10', 'Club2', 'Diamond6', 'HeartQ', 'Diamond2', 'Diamond9']
+matches SEED3 order       : True
+stream from 0 == expected  : True
+stream from   1 == expected: False
+stream from   8 == expected: False
+stream from  13 == expected: False
+stream from  50 == expected: False
+stream from  58 == expected: False
+stream from  59 == expected: False
+stream from  63 == expected: False

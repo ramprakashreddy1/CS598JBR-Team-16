@@ -1,0 +1,16 @@
+{
+  "c": {
+    "card.c": "f238795dcbbce5aec7da10e9667b5d683dfdce627e669691708b7a4916fdf156",
+    "card.h": "3b66459d7031888f12ba6dbbb745c6eb98613b624d164fc5a96f5acc0f37c6b9",
+    "card_test.c": "76a5507e4a52f6e637bbecffe2af30fec9f8b911a882d592e1cc303ff8acc98b",
+    "razz.c": "14d83865e876d09207d3e0cc7f86c90c0d1c784dd56a14022903640cc31db55a",
+    "razz_simulation.c": "4578926b8e9b3bf4e409e7e1cdddf1de49853b9b8e4e5f3e00ecb1047f9ce460",
+    "razz_simulation.h": "9fa841358118a0872dc29140c9fdd105a887e4a0a733ec7d5ec97a0529057c71"
+  },
+  "rust": {
+    "src/bin/test.rs": "8178f44e0156938588d35398abba06eac068a70a45151f58292cc8cb42a2f37e",
+    "src/card.rs": "71a3c4ef1fcc8941b2d10d9eede76e93977dccfd7697a24311d481fd823084d0",
+    "src/lib.rs": "e2fc6f257e7c8fc9dd3d957656f5d5a9c006414ac76ee926c073f39c459dc339",
+    "src/razz_simulation.rs": "15fe36a06376bfef5e9ce996904185b9c664980e766e925453946c65642b7c5a"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "framework": {
+    "name": "Claude Code",
+    "version": "2.1.321",
+    "mode": "headless CLI (claude -p, --output-format stream-json), one fresh session per controller iteration",
+    "provider": "Anthropic first-party API through the Claude Code login"
+  },
+  "claude_binary": "claude",
+  "model": "claude-sonnet-5-5",
+  "toolchain": "nightly-2025-05-13",
+
+  "max_iterations": 4,
+  "patience": 2,
+  "max_turns_per_iteration": 300,
+  "max_budget_usd_per_iteration": 15.0,
+  "max_total_budget_usd_per_project": 45.0,
+  "iteration_timeout_seconds": 5400,
+  "no_session_persistence": false,
+
+  "allowed_tools": [
+    "Read", "Glob", "Grep", "Edit", "Write", "MultiEdit", "TodoWrite",
+    "Bash(cargo:*)", "Bash(rustc:*)", "Bash(rustfmt:*)", "Bash(rustup:*)",
+    "Bash(gcc:*)", "Bash(cc:*)", "Bash(clang:*)", "Bash(make:*)", "Bash(cmake:*)",
+    "Bash(ls:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(wc:*)",
+    "Bash(grep:*)", "Bash(rg:*)", "Bash(find:*)", "Bash(diff:*)", "Bash(echo:*)",
+    "Bash(sed -n:*)", "Bash(awk:*)", "Bash(sort:*)", "Bash(uniq:*)", "Bash(tr:*)",
+    "Bash(python3:*)", "Bash(mkdir:*)", "Bash(./:*)", "Bash(/tmp/:*)", "Bash(timeout:*)",
+    "Bash(cd:*)", "Bash(printf:*)", "Bash(pwd:*)", "Bash(test:*)", "Bash(true:*)"
+  ],
+  "disallowed_tools": ["WebFetch", "WebSearch", "Agent", "Task", "NotebookEdit"],
+
+  "clippy_args": [
+    "--all-targets", "--all-features", "--",
+    "-W", "clippy::correctness", "-W", "clippy::style",
+    "-W", "clippy::complexity", "-W", "clippy::perf"
+  ],
+  "protected_files": ["Cargo.toml", "Cargo.lock", "src/bin/*.rs"],
+
+  "stopping_condition": [
+    "SUCCESS: cargo build ok AND every benchmark test passes AND clippy reports 0 findings in generated code AND all four primary unsafe metrics are 0 AND #![forbid(unsafe_code)] is present AND no unimplemented!() remains AND every public interface signature is intact",
+    "OR max_iterations controller iterations reached",
+    "OR no improvement of the progress score (build, tests passed, stubs left, unsafe, clippy) for `patience` consecutive iterations",
+    "OR cumulative agent cost >= max_total_budget_usd_per_project",
+    "OR the agent writes STATUS: BLOCKED to NOTES.md because the remaining failure is a specification conflict it cannot resolve without hard-coding"
+  ]
+}

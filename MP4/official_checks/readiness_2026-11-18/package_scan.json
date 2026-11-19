@@ -1,0 +1,27 @@
+{
+  "files_scanned": 296,
+  "bytes_excluding_build_artifacts": 5136495,
+  "credential_pattern_findings": [],
+  "largest_files": [
+    [
+      1286029,
+      "experiments/haiku/trajectories/project_2/iteration_01/agent_stream.jsonl"
+    ],
+    [
+      522369,
+      "experiments/haiku/trajectories/project_1/iteration_01/agent_stream.jsonl"
+    ],
+    [
+      401305,
+      "trajectories/project_2/iteration_01/agent_stream.jsonl"
+    ],
+    [
+      260320,
+      "experiments/razz_behavior_audit/before/cases.json"
+    ],
+    [
+      260260,
+      "official_checks/readiness_2026-11-18/razz_audit/cases.json"
+    ]
+  ]
+}

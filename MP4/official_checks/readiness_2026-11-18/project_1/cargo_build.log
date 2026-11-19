@@ -1,0 +1,34 @@
+   Compiling libbase122 v0.1.0 (/Users/adityaprasathravilla/Documents/CS598-MPs/MP1/CS598JBR-Team-16/MP4/Teammate-Work/MP4/translations/project_1)
+warning: unused imports: `BitReader`, `BitWriter`, `decode`, and `encode`
+ --> src/bin/tests.rs:1:27
+  |
+1 | use libbase122::base122::{BitReader, BitWriter, decode, encode};
+  |                           ^^^^^^^^^  ^^^^^^^^^  ^^^^^^  ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: function `bitstring_to_bytes` is never used
+ --> src/bin/tests.rs:2:4
+  |
+2 | fn bitstring_to_bytes(bitstring: &str) -> Vec<u8> {
+  |    ^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` on by default
+
+warning: function `hexstring_to_bytes` is never used
+  --> src/bin/tests.rs:22:4
+   |
+22 | fn hexstring_to_bytes(hexstring: &str) -> Vec<u8> {
+   |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `hexstring_to_bytes` is never used
+  --> src/bin/tests.rs:22:4
+   |
+22 | fn hexstring_to_bytes(hexstring: &str) -> Vec<u8> {
+   |    ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: `libbase122` (bin "tests" test) generated 1 warning
+warning: `libbase122` (bin "tests") generated 3 warnings (run `cargo fix --bin "tests"` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.96s

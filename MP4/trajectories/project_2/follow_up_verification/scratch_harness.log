@@ -1,0 +1,7 @@
+== original benchmark test (src/bin/test.rs) ==
+thread 'test_card_operations' panicked at src/bin/test.rs:147:5:
+  left: R2
+ right: R9
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+== C-faithful test (test_c_faithful.rs) ==
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s

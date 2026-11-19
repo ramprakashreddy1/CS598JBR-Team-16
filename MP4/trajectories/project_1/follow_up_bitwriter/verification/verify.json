@@ -1,0 +1,243 @@
+{
+  "rust_dir": "/Users/adityaprasathravilla/Documents/CS598-MPs/MP1/CS598JBR-Team-16/MP4/Teammate-Work/MP4/translations/project_1",
+  "toolchain": "nightly-2025-05-13",
+  "timestamp": "2026-11-17 15:56:52",
+  "protected": [],
+  "interface": [],
+  "build": {
+    "ok": true,
+    "returncode": 0,
+    "errors": 0,
+    "warnings": 4,
+    "seconds": 0.6
+  },
+  "benchmark_tests": {
+    "ok": true,
+    "returncode": 0,
+    "compile_failed": false,
+    "passed": 6,
+    "failed": 0,
+    "ignored": 1,
+    "total": 6,
+    "tests": {
+      "test_bit_reader": "passed",
+      "test_bit_writer": "passed",
+      "test_decode_error_cases": "passed",
+      "test_decode_success_cases": "passed",
+      "test_encode_all_ones": "passed",
+      "test_encode_file": "ignored",
+      "test_roundtrip": "passed"
+    },
+    "failed_tests": [],
+    "failure_output": "",
+    "seconds": 0.2
+  },
+  "tests": {
+    "ok": true,
+    "returncode": 0,
+    "compile_failed": false,
+    "passed": 12,
+    "failed": 0,
+    "ignored": 1,
+    "total": 12,
+    "tests": {
+      "test_bit_reader": "passed",
+      "test_bit_writer": "passed",
+      "test_decode_error_cases": "passed",
+      "test_decode_success_cases": "passed",
+      "test_encode_all_ones": "passed",
+      "test_encode_file": "ignored",
+      "test_roundtrip": "passed",
+      "clears_unused_bits_after_crossing_byte_boundary": "passed",
+      "clears_unused_bits_after_first_write": "passed",
+      "count_only_tracks_bytes_without_output_capacity": "passed",
+      "insufficient_capacity_leaves_output_and_cursor_unchanged": "passed",
+      "preserves_prefix_and_clears_suffix_in_mid_byte_write": "passed",
+      "zero_bit_write_leaves_partial_byte_unchanged": "passed"
+    },
+    "failed_tests": [],
+    "failure_output": "",
+    "seconds": 0.2
+  },
+  "clippy": {
+    "ok": true,
+    "returncode": 0,
+    "json_returncode": 0,
+    "all": {
+      "correctness": 0,
+      "style": 5,
+      "complexity": 0,
+      "perf": 0,
+      "other_clippy": 0,
+      "rustc": 3,
+      "clippy_total": 5,
+      "total": 8
+    },
+    "generated": {
+      "correctness": 0,
+      "style": 0,
+      "complexity": 0,
+      "perf": 0,
+      "other_clippy": 0,
+      "rustc": 0,
+      "clippy_total": 0,
+      "total": 0
+    },
+    "benchmark_tests": {
+      "correctness": 0,
+      "style": 5,
+      "complexity": 0,
+      "perf": 0,
+      "other_clippy": 0,
+      "rustc": 3,
+      "clippy_total": 5,
+      "total": 8
+    },
+    "items": [
+      {
+        "code": "unused_imports",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/tests.rs",
+        "line": 1,
+        "message": "unused imports: `BitReader`, `BitWriter`, `decode`, and `encode`",
+        "generated": false
+      },
+      {
+        "code": "dead_code",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/tests.rs",
+        "line": 2,
+        "message": "function `bitstring_to_bytes` is never used",
+        "generated": false
+      },
+      {
+        "code": "dead_code",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/tests.rs",
+        "line": 22,
+        "message": "function `hexstring_to_bytes` is never used",
+        "generated": false
+      },
+      {
+        "code": "clippy::uninlined_format_args",
+        "category": "style",
+        "level": "warning",
+        "file": "src/bin/tests.rs",
+        "line": 134,
+        "message": "variables can be used directly in the `format!` string",
+        "generated": false
+      },
+      {
+        "code": "clippy::uninlined_format_args",
+        "category": "style",
+        "level": "warning",
+        "file": "src/bin/tests.rs",
+        "line": 154,
+        "message": "variables can be used directly in the `format!` string",
+        "generated": false
+      },
+      {
+        "code": "clippy::uninlined_format_args",
+        "category": "style",
+        "level": "warning",
+        "file": "src/bin/tests.rs",
+        "line": 157,
+        "message": "variables can be used directly in the `format!` string",
+        "generated": false
+      },
+      {
+        "code": "clippy::uninlined_format_args",
+        "category": "style",
+        "level": "warning",
+        "file": "src/bin/tests.rs",
+        "line": 196,
+        "message": "variables can be used directly in the `format!` string",
+        "generated": false
+      },
+      {
+        "code": "clippy::uninlined_format_args",
+        "category": "style",
+        "level": "warning",
+        "file": "src/bin/tests.rs",
+        "line": 201,
+        "message": "variables can be used directly in the `format!` string",
+        "generated": false
+      }
+    ],
+    "seconds": 0.3
+  },
+  "unsafe": {
+    "project": "/Users/adityaprasathravilla/Documents/CS598-MPs/MP1/CS598JBR-Team-16/MP4/Teammate-Work/MP4/translations/project_1",
+    "totals": {
+      "unsafe_lines": 0,
+      "unsafe_calls": 0,
+      "unsafe_casts": 0,
+      "pointer_arithmetic": 0,
+      "unsafe_blocks": 0,
+      "unsafe_fns": 0,
+      "unsafe_impls_or_traits": 0,
+      "raw_pointer_types": 0,
+      "ffi_extern_blocks": 0,
+      "transmutes": 0,
+      "manual_alloc": 0,
+      "unwrap_calls": 0,
+      "expect_calls": 0,
+      "panic_macros": 0,
+      "clone_calls": 0,
+      "unimplemented_or_todo": 0,
+      "loc": 244,
+      "forbid_unsafe_code": true,
+      "primary_total": 0,
+      "files": [
+        "src/base122.rs",
+        "src/lib.rs"
+      ]
+    },
+    "per_file": {
+      "src/base122.rs": {
+        "unsafe_lines": 0,
+        "unsafe_calls": 0,
+        "unsafe_casts": 0,
+        "pointer_arithmetic": 0,
+        "unsafe_blocks": 0,
+        "unsafe_fns": 0,
+        "unsafe_impls_or_traits": 0,
+        "raw_pointer_types": 0,
+        "ffi_extern_blocks": 0,
+        "transmutes": 0,
+        "manual_alloc": 0,
+        "unwrap_calls": 0,
+        "expect_calls": 0,
+        "panic_macros": 0,
+        "clone_calls": 0,
+        "unimplemented_or_todo": 0,
+        "loc": 242
+      },
+      "src/lib.rs": {
+        "unsafe_lines": 0,
+        "unsafe_calls": 0,
+        "unsafe_casts": 0,
+        "pointer_arithmetic": 0,
+        "unsafe_blocks": 0,
+        "unsafe_fns": 0,
+        "unsafe_impls_or_traits": 0,
+        "raw_pointer_types": 0,
+        "ffi_extern_blocks": 0,
+        "transmutes": 0,
+        "manual_alloc": 0,
+        "unwrap_calls": 0,
+        "expect_calls": 0,
+        "panic_macros": 0,
+        "clone_calls": 0,
+        "unimplemented_or_todo": 0,
+        "loc": 2,
+        "forbid_unsafe_code": true,
+        "deny_unsafe_code": false
+      }
+    }
+  },
+  "success": true
+}

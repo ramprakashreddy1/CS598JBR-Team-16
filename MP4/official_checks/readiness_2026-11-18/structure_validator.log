@@ -1,0 +1,25 @@
+Official validator local functions; candidate placed at top-level MP4 through temporary symlink. Remote branch not tested.
+[32mValid repository name: CS598JBR-Team-16[0m
+[32mMP4/README.md found![0m
+[32msrc/ found![0m
+[32mconfigs/ found![0m
+[32msubjects/project_1/ found![0m
+[32msubjects/project_2/ found![0m
+[32mtranslations/project_1/ found![0m
+[32mtranslations/project_2/ found![0m
+[32mtrajectories/project_1/ found![0m
+[32mtrajectories/project_2/ found![0m
+[32msrc/ contains files![0m
+[32mconfigs/ contains files![0m
+[34m
+Checking Project 1...[0m
+[32mProject 1: C source files found![0m
+[32mProject 1: Rust source files found![0m
+[32mProject 1: Cargo.toml found![0m
+[32mProject 1: Trajectory files found![0m
+[34m
+Checking Project 2...[0m
+[32mProject 2: C source files found![0m
+[32mProject 2: Rust source files found![0m
+[32mProject 2: Cargo.toml found![0m
+[32mProject 2: Trajectory files found![0m

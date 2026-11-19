@@ -1,0 +1,13 @@
+{
+  "cases": 505,
+  "by_operation": {
+    "parse": 1,
+    "deck": 24,
+    "hand": 288,
+    "simulate": 192
+  },
+  "matched": 505,
+  "simulation_games": 32384,
+  "mismatches": [],
+  "scope": "Valid cards, seeded serial dealing, supported hand sorters, all iterator actions, valid decided-card arrays"
+}

@@ -1,0 +1,103 @@
+warning: unused imports: `BitReader`, `BitWriter`, `decode`, and `encode`
+ --> src/bin/tests.rs:1:27
+  |
+1 | use libbase122::base122::{BitReader, BitWriter, decode, encode};
+  |                           ^^^^^^^^^  ^^^^^^^^^  ^^^^^^  ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: function `bitstring_to_bytes` is never used
+ --> src/bin/tests.rs:2:4
+  |
+2 | fn bitstring_to_bytes(bitstring: &str) -> Vec<u8> {
+  |    ^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` on by default
+
+warning: function `hexstring_to_bytes` is never used
+  --> src/bin/tests.rs:22:4
+   |
+22 | fn hexstring_to_bytes(hexstring: &str) -> Vec<u8> {
+   |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `hexstring_to_bytes` is never used
+  --> src/bin/tests.rs:22:4
+   |
+22 | fn hexstring_to_bytes(hexstring: &str) -> Vec<u8> {
+   |    ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: variables can be used directly in the `format!` string
+   --> src/bin/tests.rs:134:9
+    |
+134 |         assert!(result.is_err(), "Expected decode to fail for input: {}", encoded);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+    = note: `-W clippy::uninlined-format-args` implied by `-W clippy::style`
+    = help: to override `-W clippy::style` add `#[allow(clippy::uninlined_format_args)]`
+help: change this to
+    |
+134 -         assert!(result.is_err(), "Expected decode to fail for input: {}", encoded);
+134 +         assert!(result.is_err(), "Expected decode to fail for input: {encoded}");
+    |
+
+warning: variables can be used directly in the `format!` string
+   --> src/bin/tests.rs:154:9
+    |
+154 |         assert!(result.is_ok(), "Expected decode to succeed for input: {}", encoded);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+help: change this to
+    |
+154 -         assert!(result.is_ok(), "Expected decode to succeed for input: {}", encoded);
+154 +         assert!(result.is_ok(), "Expected decode to succeed for input: {encoded}");
+    |
+
+warning: variables can be used directly in the `format!` string
+   --> src/bin/tests.rs:157:9
+    |
+157 | /         assert_eq!(decoded, expected_bytes, 
+158 | |             "Decoded output does not match expected for input: {}", encoded);
+    | |____________________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+help: change this to
+    |
+158 -             "Decoded output does not match expected for input: {}", encoded);
+158 +             "Decoded output does not match expected for input: {encoded}");
+    |
+
+warning: variables can be used directly in the `format!` string
+   --> src/bin/tests.rs:196:9
+    |
+196 | /         assert_eq!(encoded, expected_encoded, 
+197 | |             "Encoded output does not match expected for test: {}", description);
+    | |_______________________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+help: change this to
+    |
+197 -             "Encoded output does not match expected for test: {}", description);
+197 +             "Encoded output does not match expected for test: {description}");
+    |
+
+warning: variables can be used directly in the `format!` string
+   --> src/bin/tests.rs:201:9
+    |
+201 | /         assert_eq!(decoded, input, 
+202 | |             "Decoded output does not match input for test: {}", description);
+    | |____________________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+help: change this to
+    |
+202 -             "Decoded output does not match input for test: {}", description);
+202 +             "Decoded output does not match input for test: {description}");
+    |
+
+warning: `libbase122` (bin "tests") generated 3 warnings (run `cargo clippy --fix --bin "tests"` to apply 1 suggestion)
+warning: `libbase122` (bin "tests" test) generated 6 warnings (run `cargo clippy --fix --bin "tests" --tests` to apply 5 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s

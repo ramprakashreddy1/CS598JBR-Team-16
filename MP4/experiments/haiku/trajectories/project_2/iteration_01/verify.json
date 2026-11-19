@@ -1,0 +1,285 @@
+{
+  "rust_dir": "experiments/haiku/translations/project_2",
+  "toolchain": "nightly-2025-05-13",
+  "timestamp": "2026-11-09 23:39:34",
+  "protected": [],
+  "interface": [],
+  "build": {
+    "ok": true,
+    "returncode": 0,
+    "errors": 0,
+    "warnings": 13,
+    "seconds": 0.1
+  },
+  "tests": {
+    "ok": false,
+    "returncode": 101,
+    "compile_failed": false,
+    "passed": 0,
+    "failed": 1,
+    "ignored": 0,
+    "total": 1,
+    "tests": {
+      "test_card_operations": "failed"
+    },
+    "failed_tests": [
+      "test_card_operations"
+    ],
+    "failure_output": "failures:\n\n---- test_card_operations stdout ----\n\nthread 'test_card_operations' panicked at src/bin/test.rs:147:5:\nassertion `left == right` failed\n  left: R2\n right: R9\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\n\nfailures:\n    test_card_operations\n\ntest result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: unused variable: `len`\n  --> src/bin/test.rs:17:29\n   |\n17 | fn test_sort_card_by_rank_1(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`\n   |\n   = note: `#[warn(unused_variables)]` on by default\n\nwarning: unused variable: `len`\n  --> src/bin/test.rs:26:29\n   |\n26 | fn test_sort_card_by_rank_2(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`\n\nwarning: unused variable: `len`\n  --> src/bin/test.rs:34:29\n   |\n34 | fn test_sort_card_by_rank_3(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`\n\nwarning: unused variable: `len`\n  --> src/bin/test.rs:42:29\n   |\n42 | fn test_sort_card_by_rank_4(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`\n\nwarning: unused variable: `len`\n  --> src/bin/test.rs:49:20\n   |\n49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |                    ^^^ help: if this is intentional, prefix it with an underscore: `_len`\n\nwarning: unused variable: `pos`\n  --> src/bin/test.rs:49:30\n   |\n49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |                              ^^^ help: if this is intentional, prefix it with an underscore: `_pos`\n\nwarning: unused variable: `c`\n  --> src/bin/test.rs:49:40\n   |\n49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |                                        ^ help: if this is intentional, prefix it with an underscore: `_c`\n\nwarning: static `SEED3_DEALING_ORDER` is never used\n --> src/bin/test.rs:2:8\n  |\n2 | static SEED3_DEALING_ORDER: [CardSuitRank; 52] = [\n  |        ^^^^^^^^^^^^^^^^^^^\n  |\n  = note: `#[warn(dead_code)]` on by default\n\nwarning: function `test_sort_card_by_rank_1` is never used\n  --> src/bin/test.rs:17:4\n   |\n17 | fn test_sort_card_by_rank_1(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `test_sort_card_by_rank_2` is never used\n  --> src/bin/test.rs:26:4\n   |\n26 | fn test_sort_card_by_rank_2(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `test_sort_card_by_rank_3` is never used\n  --> src/bin/test.rs:34:4\n   |\n34 | fn test_sort_card_by_rank_3(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `test_sort_card_by_rank_4` is never used\n  --> src/bin/test.rs:42:4\n   |\n42 | fn test_sort_card_by_rank_4(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |    ^^^^^^^^^^^^^^^^^^^^^^^^\n\nwarning: function `test_empty_hand` is never used\n  --> src/bin/test.rs:49:4\n   |\n49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {\n   |    ^^^^^^^^^^^^^^^\n\nwarning: `razz_simulation` (bin \"test\" test) generated 8 warnings\nwarning: `razz_simulation` (bin \"test\") generated 13 warnings (8 duplicates)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s\n     Running unittests src/bin/test.rs (target/debug/deps/test-5bc13b628b007966)\nerror: test failed, to rerun pass `--bin test`\n     Running tests/scratch_hand.rs (target/debug/deps/scratch_hand-77dd122c1091b5c8)\n   Doc-tests razz_simulation\nerror: 1 target failed:\n    `--bin test`\n",
+    "seconds": 0.2
+  },
+  "clippy": {
+    "ok": true,
+    "returncode": 0,
+    "all": {
+      "correctness": 0,
+      "style": 1,
+      "complexity": 0,
+      "perf": 0,
+      "other_clippy": 0,
+      "rustc": 13,
+      "clippy_total": 1,
+      "total": 14
+    },
+    "generated": {
+      "correctness": 0,
+      "style": 0,
+      "complexity": 0,
+      "perf": 0,
+      "other_clippy": 0,
+      "rustc": 0,
+      "clippy_total": 0,
+      "total": 0
+    },
+    "benchmark_tests": {
+      "correctness": 0,
+      "style": 1,
+      "complexity": 0,
+      "perf": 0,
+      "other_clippy": 0,
+      "rustc": 13,
+      "clippy_total": 1,
+      "total": 14
+    },
+    "items": [
+      {
+        "code": "unused_variables",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 17,
+        "message": "unused variable: `len`",
+        "generated": false
+      },
+      {
+        "code": "unused_variables",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 26,
+        "message": "unused variable: `len`",
+        "generated": false
+      },
+      {
+        "code": "unused_variables",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 34,
+        "message": "unused variable: `len`",
+        "generated": false
+      },
+      {
+        "code": "unused_variables",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 42,
+        "message": "unused variable: `len`",
+        "generated": false
+      },
+      {
+        "code": "unused_variables",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 49,
+        "message": "unused variable: `len`",
+        "generated": false
+      },
+      {
+        "code": "unused_variables",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 49,
+        "message": "unused variable: `pos`",
+        "generated": false
+      },
+      {
+        "code": "unused_variables",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 49,
+        "message": "unused variable: `c`",
+        "generated": false
+      },
+      {
+        "code": "dead_code",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 2,
+        "message": "static `SEED3_DEALING_ORDER` is never used",
+        "generated": false
+      },
+      {
+        "code": "dead_code",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 17,
+        "message": "function `test_sort_card_by_rank_1` is never used",
+        "generated": false
+      },
+      {
+        "code": "dead_code",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 26,
+        "message": "function `test_sort_card_by_rank_2` is never used",
+        "generated": false
+      },
+      {
+        "code": "dead_code",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 34,
+        "message": "function `test_sort_card_by_rank_3` is never used",
+        "generated": false
+      },
+      {
+        "code": "dead_code",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 42,
+        "message": "function `test_sort_card_by_rank_4` is never used",
+        "generated": false
+      },
+      {
+        "code": "dead_code",
+        "category": "rustc",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 49,
+        "message": "function `test_empty_hand` is never used",
+        "generated": false
+      },
+      {
+        "code": "clippy::assertions_on_constants",
+        "category": "style",
+        "level": "warning",
+        "file": "src/bin/test.rs",
+        "line": 50,
+        "message": "`assert!(false, ..)` should probably be replaced",
+        "generated": false
+      }
+    ],
+    "seconds": 0.1
+  },
+  "unsafe": {
+    "project": "experiments/haiku/translations/project_2",
+    "totals": {
+      "unsafe_lines": 0,
+      "unsafe_calls": 0,
+      "unsafe_casts": 0,
+      "pointer_arithmetic": 0,
+      "unsafe_blocks": 0,
+      "unsafe_fns": 0,
+      "unsafe_impls_or_traits": 0,
+      "raw_pointer_types": 0,
+      "ffi_extern_blocks": 0,
+      "transmutes": 0,
+      "manual_alloc": 0,
+      "unwrap_calls": 0,
+      "expect_calls": 0,
+      "panic_macros": 0,
+      "clone_calls": 0,
+      "unimplemented_or_todo": 0,
+      "loc": 511,
+      "forbid_unsafe_code": true,
+      "primary_total": 0,
+      "files": [
+        "src/card.rs",
+        "src/lib.rs",
+        "src/razz_simulation.rs"
+      ]
+    },
+    "per_file": {
+      "src/card.rs": {
+        "unsafe_lines": 0,
+        "unsafe_calls": 0,
+        "unsafe_casts": 0,
+        "pointer_arithmetic": 0,
+        "unsafe_blocks": 0,
+        "unsafe_fns": 0,
+        "unsafe_impls_or_traits": 0,
+        "raw_pointer_types": 0,
+        "ffi_extern_blocks": 0,
+        "transmutes": 0,
+        "manual_alloc": 0,
+        "unwrap_calls": 0,
+        "expect_calls": 0,
+        "panic_macros": 0,
+        "clone_calls": 0,
+        "unimplemented_or_todo": 0,
+        "loc": 418
+      },
+      "src/lib.rs": {
+        "unsafe_lines": 0,
+        "unsafe_calls": 0,
+        "unsafe_casts": 0,
+        "pointer_arithmetic": 0,
+        "unsafe_blocks": 0,
+        "unsafe_fns": 0,
+        "unsafe_impls_or_traits": 0,
+        "raw_pointer_types": 0,
+        "ffi_extern_blocks": 0,
+        "transmutes": 0,
+        "manual_alloc": 0,
+        "unwrap_calls": 0,
+        "expect_calls": 0,
+        "panic_macros": 0,
+        "clone_calls": 0,
+        "unimplemented_or_todo": 0,
+        "loc": 3,
+        "forbid_unsafe_code": true,
+        "deny_unsafe_code": false
+      },
+      "src/razz_simulation.rs": {
+        "unsafe_lines": 0,
+        "unsafe_calls": 0,
+        "unsafe_casts": 0,
+        "pointer_arithmetic": 0,
+        "unsafe_blocks": 0,
+        "unsafe_fns": 0,
+        "unsafe_impls_or_traits": 0,
+        "raw_pointer_types": 0,
+        "ffi_extern_blocks": 0,
+        "transmutes": 0,
+        "manual_alloc": 0,
+        "unwrap_calls": 0,
+        "expect_calls": 0,
+        "panic_macros": 0,
+        "clone_calls": 0,
+        "unimplemented_or_todo": 0,
+        "loc": 90
+      }
+    }
+  },
+  "success": false
+}

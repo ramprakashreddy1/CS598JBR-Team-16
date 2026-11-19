@@ -1,0 +1,137 @@
+   Compiling razz_simulation v0.1.0 (/private/var/folders/wl/fjv0br2d1bgfnq6ngl1ymjtw0000gn/T/mp4-razz-repair-6bdj6t8a/project_2)
+warning: unused variable: `len`
+  --> src/bin/test.rs:17:29
+   |
+17 | fn test_sort_card_by_rank_1(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+   |
+   = note: `#[warn(unused_variables)]` on by default
+
+warning: unused variable: `len`
+  --> src/bin/test.rs:26:29
+   |
+26 | fn test_sort_card_by_rank_2(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+
+warning: unused variable: `len`
+  --> src/bin/test.rs:34:29
+   |
+34 | fn test_sort_card_by_rank_3(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+
+warning: unused variable: `len`
+  --> src/bin/test.rs:42:29
+   |
+42 | fn test_sort_card_by_rank_4(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+
+warning: unused variable: `len`
+  --> src/bin/test.rs:49:20
+   |
+49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                    ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+
+warning: unused variable: `pos`
+  --> src/bin/test.rs:49:30
+   |
+49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                              ^^^ help: if this is intentional, prefix it with an underscore: `_pos`
+
+warning: unused variable: `c`
+  --> src/bin/test.rs:49:40
+   |
+49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                                        ^ help: if this is intentional, prefix it with an underscore: `_c`
+
+warning: static `SEED3_DEALING_ORDER` is never used
+ --> src/bin/test.rs:2:8
+  |
+2 | static SEED3_DEALING_ORDER: [CardSuitRank; 52] = [
+  |        ^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` on by default
+
+warning: function `test_sort_card_by_rank_1` is never used
+  --> src/bin/test.rs:17:4
+   |
+17 | fn test_sort_card_by_rank_1(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `test_sort_card_by_rank_2` is never used
+  --> src/bin/test.rs:26:4
+   |
+26 | fn test_sort_card_by_rank_2(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `test_sort_card_by_rank_3` is never used
+  --> src/bin/test.rs:34:4
+   |
+34 | fn test_sort_card_by_rank_3(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `test_sort_card_by_rank_4` is never used
+  --> src/bin/test.rs:42:4
+   |
+42 | fn test_sort_card_by_rank_4(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `test_empty_hand` is never used
+  --> src/bin/test.rs:49:4
+   |
+49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |    ^^^^^^^^^^^^^^^
+
+warning: `razz_simulation` (bin "test") generated 13 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.80s
+     Running tests/hand_traversal.rs (target/debug/deps/hand_traversal-e973c787936b38f9)
+
+running 7 tests
+test duplicate_non_head_matches_are_all_removed_including_tail ... ok
+test empty_and_singleton_hands_support_all_actions_and_reuse ... ok
+test repeated_non_head_removals_keep_position_and_update_length ... ok
+test duplicate_head_removal_stops_after_first_match ... FAILED
+test sorted_duplicate_ranks_and_cards_preserve_c_order ... FAILED
+test removing_head_ends_this_traversal ... FAILED
+test all_actions_at_head_middle_and_tail ... FAILED
+
+failures:
+
+---- duplicate_head_removal_stops_after_first_match stdout ----
+
+thread 'duplicate_head_removal_stops_after_first_match' panicked at tests/hand_traversal.rs:61:5:
+assertion `left == right` failed
+  left: [Spade2]
+ right: [SpadeAce, Spade2]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- sorted_duplicate_ranks_and_cards_preserve_c_order stdout ----
+
+thread 'sorted_duplicate_ranks_and_cards_preserve_c_order' panicked at tests/hand_traversal.rs:136:5:
+assertion `left == right` failed
+  left: [HeartAce, Heart2, Spade2]
+ right: [HeartAce, SpadeAce, Heart2, Spade2]
+
+---- removing_head_ends_this_traversal stdout ----
+
+thread 'removing_head_ends_this_traversal' panicked at tests/hand_traversal.rs:52:5:
+assertion `left == right` failed
+  left: [(3, 0, SpadeAce), (2, 0, Spade4), (1, 0, Spade7)]
+ right: [(3, 0, SpadeAce)]
+
+---- all_actions_at_head_middle_and_tail stdout ----
+
+thread 'all_actions_at_head_middle_and_tail' panicked at tests/hand_traversal.rs:103:13:
+assertion `left == right` failed: action 2, target 0
+  left: [(3, 0, Spade2), (2, 0, HeartAce), (2, 1, Diamond4)]
+ right: [(3, 0, Spade2)]
+
+
+failures:
+    all_actions_at_head_middle_and_tail
+    duplicate_head_removal_stops_after_first_match
+    removing_head_ends_this_traversal
+    sorted_duplicate_ranks_and_cards_preserve_c_order
+
+test result: FAILED. 3 passed; 4 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test hand_traversal`

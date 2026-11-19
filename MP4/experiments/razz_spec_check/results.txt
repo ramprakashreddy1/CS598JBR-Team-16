@@ -1,0 +1,14 @@
+Run on 2026-11-09 with nightly-2025-05-13 against translations/project_2 (final pipeline output).
+
+== original benchmark test (src/bin/test.rs) ==
+thread 'test_card_operations' panicked at src/bin/test.rs:147:5:
+assertion `left == right` failed
+  left: R2
+ right: R9
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+== C-faithful test (test_c_faithful.rs) ==
+test test_card_operations ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+Original C test suite (subjects/project_2/card_test.c, built with cc -std=gnu89): all asserts pass, exit 0.

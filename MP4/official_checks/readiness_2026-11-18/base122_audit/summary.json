@@ -1,0 +1,10 @@
+{
+  "cases": 133730,
+  "encode_cases": 66865,
+  "decode_cases": 66865,
+  "matched": 133730,
+  "mismatch_count": 0,
+  "c_output_sha256": "8afb49c49d60f5d5e9060f784965c7e17f6657f86ffd14ddbded99812526870a",
+  "rust_output_sha256": "8afb49c49d60f5d5e9060f784965c7e17f6657f86ffd14ddbded99812526870a",
+  "scope": "encode/decode bytes and exact error messages; every zero-, one-, and two-byte input; seeded longer inputs; every successful encode round-tripped in Rust"
+}

@@ -1,0 +1,12 @@
+{
+  "c": {
+    "base122.c": "3c14f1bb29a47c8648d7b50e287439594ffc044bcc7ddc84ad15807a41cd2c67",
+    "base122.h": "6b754531afb8181115bd52d7ed32bf59bb2e129e33edcc00c232a30ad670d451",
+    "util.h": "abfb402ebf0b65ef30fca310a815ffc8fe759e387e0e8b7ea9c39431f74efddd"
+  },
+  "rust": {
+    "base122.rs": "64b2fc21c44b944123fc42787675f8b79fd0d30d4b0e4a87967230b46a4ed976",
+    "bin/tests.rs": "908b82ece390e61739c70f5aaea25d45565972ebbf8bed43f87d44b92f2ec1f2",
+    "lib.rs": "7f8fa650b27ac46ed5ca099204bcc2c50416d4f4ff52b5f3fe41e0bab9d67b0e"
+  }
+}

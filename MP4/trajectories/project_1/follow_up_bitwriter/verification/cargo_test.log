@@ -1,0 +1,70 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 7 tests
+test test_bit_reader ... ok
+test test_bit_writer ... ok
+test test_decode_error_cases ... ok
+test test_decode_success_cases ... ok
+test test_encode_all_ones ... ok
+test test_encode_file ... ignored
+test test_roundtrip ... ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 6 tests
+test clears_unused_bits_after_crossing_byte_boundary ... ok
+test clears_unused_bits_after_first_write ... ok
+test count_only_tracks_bytes_without_output_capacity ... ok
+test insufficient_capacity_leaves_output_and_cursor_unchanged ... ok
+test preserves_prefix_and_clears_suffix_in_mid_byte_write ... ok
+test zero_bit_write_leaves_partial_byte_unchanged ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+warning: function `hexstring_to_bytes` is never used
+  --> src/bin/tests.rs:22:4
+   |
+22 | fn hexstring_to_bytes(hexstring: &str) -> Vec<u8> {
+   |    ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: `libbase122` (bin "tests" test) generated 1 warning
+warning: unused imports: `BitReader`, `BitWriter`, `decode`, and `encode`
+ --> src/bin/tests.rs:1:27
+  |
+1 | use libbase122::base122::{BitReader, BitWriter, decode, encode};
+  |                           ^^^^^^^^^  ^^^^^^^^^  ^^^^^^  ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: function `bitstring_to_bytes` is never used
+ --> src/bin/tests.rs:2:4
+  |
+2 | fn bitstring_to_bytes(bitstring: &str) -> Vec<u8> {
+  |    ^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` on by default
+
+warning: function `hexstring_to_bytes` is never used
+  --> src/bin/tests.rs:22:4
+   |
+22 | fn hexstring_to_bytes(hexstring: &str) -> Vec<u8> {
+   |    ^^^^^^^^^^^^^^^^^^
+
+warning: `libbase122` (bin "tests") generated 3 warnings (run `cargo fix --bin "tests"` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (/var/folders/wl/fjv0br2d1bgfnq6ngl1ymjtw0000gn/T/mp4-final-verify-n6420725/debug/deps/libbase122-411184ce28fff6e3)
+     Running unittests src/bin/tests.rs (/var/folders/wl/fjv0br2d1bgfnq6ngl1ymjtw0000gn/T/mp4-final-verify-n6420725/debug/deps/tests-6e0f205c8c10d488)
+     Running tests/bit_writer.rs (/var/folders/wl/fjv0br2d1bgfnq6ngl1ymjtw0000gn/T/mp4-final-verify-n6420725/debug/deps/bit_writer-d093d576b1f6a85e)
+   Doc-tests libbase122

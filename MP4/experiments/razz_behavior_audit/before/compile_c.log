@@ -1,0 +1,28 @@
+In file included from /Users/adityaprasathravilla/Documents/CS598-MPs/MP1/CS598JBR-Team-16/MP4/Teammate-Work/MP4/experiments/razz_behavior_audit/probe.c:4:
+/Users/adityaprasathravilla/Documents/CS598-MPs/MP1/CS598JBR-Team-16/MP4/Teammate-Work/MP4/subjects/project_2/card.c:84:11: warning: enumeration values 'CARD_COUNT' and 'INVALID_CARD' not handled in switch [-Wswitch]
+   84 |   switch (csr)
+      |           ^~~
+/Users/adityaprasathravilla/Documents/CS598-MPs/MP1/CS598JBR-Team-16/MP4/Teammate-Work/MP4/subjects/project_2/card.c:84:11: note: add missing switch cases
+   84 |   switch (csr)
+      |           ^
+/Users/adityaprasathravilla/Documents/CS598-MPs/MP1/CS598JBR-Team-16/MP4/Teammate-Work/MP4/subjects/project_2/card.c:484:11: warning: enumeration values 'SUIT_COUNT' and 'INVALID_SUIT' not handled in switch [-Wswitch]
+  484 |   switch (cs)
+      |           ^~
+/Users/adityaprasathravilla/Documents/CS598-MPs/MP1/CS598JBR-Team-16/MP4/Teammate-Work/MP4/subjects/project_2/card.c:484:11: note: add missing switch cases
+  484 |   switch (cs)
+      |           ^
+  485 |     {
+  486 |     case SPADE:
+  487 |       csr = SPADE_ACE;
+  488 |       break;
+  489 |     case HEART:
+  490 |       csr = HEART_ACE;
+  491 |       break;
+  492 |     case DIAMOND:
+  493 |       csr = DIAMOND_ACE;
+  494 |       break;
+  495 |     case CLUB:
+  496 |       csr = CLUB_ACE;
+  497 |       break;
+  498 |     }
+2 warnings generated.

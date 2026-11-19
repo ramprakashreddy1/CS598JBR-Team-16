@@ -1,0 +1,14 @@
+--- /Users/ram/Desktop/UIUC/Fall 2026/CS598_LLM/CS598JBR-Team-16/MP4/translations/project_2/src/card.rs	2026-11-09 20:41:53
++++ src/card.rs	2026-11-09 23:28:58
+@@ -72,6 +72,11 @@
+     /// as by `srand48(3)` and shared by every deck in the process.
+     static RNG_STATE: AtomicU64 = AtomicU64::new((3 << 16) | 0x330E);
+ 
++    /// Harness-only equivalent of `srand48(seed)` (not part of the CRUST-Bench interface).
++    pub fn seed_rng(seed: u64) {
++        RNG_STATE.store(((seed & 0xFFFF_FFFF) << 16) | 0x330E, Ordering::Relaxed);
++    }
++
+     /// Advances the generator and returns its top 31 bits, like `lrand48`.
+     fn lrand48() -> u64 {
+         let step = |x: u64| x.wrapping_mul(0x5DEECE66D).wrapping_add(0xB) & ((1 << 48) - 1);

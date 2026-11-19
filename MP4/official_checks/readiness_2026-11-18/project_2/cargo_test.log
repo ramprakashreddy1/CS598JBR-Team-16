@@ -1,0 +1,135 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test test_card_operations ... FAILED
+
+failures:
+
+---- test_card_operations stdout ----
+
+thread 'test_card_operations' panicked at src/bin/test.rs:147:5:
+assertion `left == right` failed
+  left: R2
+ right: R9
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    test_card_operations
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 8 tests
+test all_actions_at_head_middle_and_tail ... ok
+test duplicate_head_removal_stops_after_first_match ... ok
+test duplicate_non_head_matches_are_all_removed_including_tail ... ok
+test empty_and_singleton_hands_support_all_actions_and_reuse ... ok
+test named_removal_handles_each_position_and_reinsertion ... ok
+test removing_head_ends_this_traversal ... ok
+test repeated_non_head_removals_keep_position_and_update_length ... ok
+test sorted_duplicate_ranks_and_cards_preserve_c_order ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+warning: unused variable: `len`
+  --> src/bin/test.rs:17:29
+   |
+17 | fn test_sort_card_by_rank_1(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+   |
+   = note: `#[warn(unused_variables)]` on by default
+
+warning: unused variable: `len`
+  --> src/bin/test.rs:26:29
+   |
+26 | fn test_sort_card_by_rank_2(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+
+warning: unused variable: `len`
+  --> src/bin/test.rs:34:29
+   |
+34 | fn test_sort_card_by_rank_3(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+
+warning: unused variable: `len`
+  --> src/bin/test.rs:42:29
+   |
+42 | fn test_sort_card_by_rank_4(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                             ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+
+warning: unused variable: `len`
+  --> src/bin/test.rs:49:20
+   |
+49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                    ^^^ help: if this is intentional, prefix it with an underscore: `_len`
+
+warning: unused variable: `pos`
+  --> src/bin/test.rs:49:30
+   |
+49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                              ^^^ help: if this is intentional, prefix it with an underscore: `_pos`
+
+warning: unused variable: `c`
+  --> src/bin/test.rs:49:40
+   |
+49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |                                        ^ help: if this is intentional, prefix it with an underscore: `_c`
+
+warning: static `SEED3_DEALING_ORDER` is never used
+ --> src/bin/test.rs:2:8
+  |
+2 | static SEED3_DEALING_ORDER: [CardSuitRank; 52] = [
+  |        ^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` on by default
+
+warning: `razz_simulation` (bin "test" test) generated 8 warnings
+warning: function `test_sort_card_by_rank_1` is never used
+  --> src/bin/test.rs:17:4
+   |
+17 | fn test_sort_card_by_rank_1(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `test_sort_card_by_rank_2` is never used
+  --> src/bin/test.rs:26:4
+   |
+26 | fn test_sort_card_by_rank_2(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `test_sort_card_by_rank_3` is never used
+  --> src/bin/test.rs:34:4
+   |
+34 | fn test_sort_card_by_rank_3(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `test_sort_card_by_rank_4` is never used
+  --> src/bin/test.rs:42:4
+   |
+42 | fn test_sort_card_by_rank_4(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `test_empty_hand` is never used
+  --> src/bin/test.rs:49:4
+   |
+49 | fn test_empty_hand(len: u64, pos: u64, c: &Option<Card>) -> ItrAction {
+   |    ^^^^^^^^^^^^^^^
+
+warning: `razz_simulation` (bin "test") generated 13 warnings (8 duplicates)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests src/lib.rs (/var/folders/wl/fjv0br2d1bgfnq6ngl1ymjtw0000gn/T/mp4-readiness-2-nu7pvsfg/debug/deps/razz_simulation-4494abb8970d2fb3)
+     Running unittests src/bin/test.rs (/var/folders/wl/fjv0br2d1bgfnq6ngl1ymjtw0000gn/T/mp4-readiness-2-nu7pvsfg/debug/deps/test-5bc13b628b007966)
+error: test failed, to rerun pass `--bin test`
+     Running tests/hand_traversal.rs (/var/folders/wl/fjv0br2d1bgfnq6ngl1ymjtw0000gn/T/mp4-readiness-2-nu7pvsfg/debug/deps/hand_traversal-e973c787936b38f9)
+   Doc-tests razz_simulation
+error: 1 target failed:
+    `--bin test`

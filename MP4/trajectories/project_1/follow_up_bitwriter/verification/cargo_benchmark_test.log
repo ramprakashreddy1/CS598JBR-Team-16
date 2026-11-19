@@ -1,0 +1,23 @@
+
+running 7 tests
+test test_bit_reader ... ok
+test test_bit_writer ... ok
+test test_decode_error_cases ... ok
+test test_decode_success_cases ... ok
+test test_encode_all_ones ... ok
+test test_encode_file ... ignored
+test test_roundtrip ... ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+warning: function `hexstring_to_bytes` is never used
+  --> src/bin/tests.rs:22:4
+   |
+22 | fn hexstring_to_bytes(hexstring: &str) -> Vec<u8> {
+   |    ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: `libbase122` (bin "tests" test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/bin/tests.rs (/var/folders/wl/fjv0br2d1bgfnq6ngl1ymjtw0000gn/T/mp4-final-verify-n6420725/debug/deps/tests-6e0f205c8c10d488)
