@@ -14,7 +14,6 @@ MP4/
 │                        and to detect edits to protected files            (minor addition to the required layout)
 ├── official_checks/     official NewMetrics (unsafe-metrics) results, course structure-validator log, readiness audit   (minor addition)
 ├── tests/               unit tests for the verifier: python3 -m unittest discover -s tests   (minor addition)
-├── report/              MP4 section of the progress report (LaTeX) plus a standalone wrapper   (minor addition)
 └── experiments/         razz_spec_check/: evidence for the project_2 test contradiction and a C-faithful harness
                          haiku/: the same pipeline run with claude-haiku-5-5 (ablation)   (minor addition)
 ```
