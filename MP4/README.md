@@ -37,7 +37,7 @@ A C compiler is used for the C-faithful supplemental harness. No third-party Pyt
 
 ## Run
 
-### Evaluate the submitted Rust translations (no Claude login needed)
+### Evaluate the submitted Rust translations
 
 ```bash
 # Run from MP4/ (after cd MP4 in Setup)
